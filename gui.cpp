@@ -59,6 +59,7 @@ bool Gui::loadFile(char * filename, ID3D11Device* device){
 	char input;
 	float input2;
 	char texfile[128];
+	char guiText[128];
 
 	//open file
 	fin.open(filename);
@@ -110,11 +111,21 @@ bool Gui::loadFile(char * filename, ID3D11Device* device){
 			j++;
 		}
 		texfile[j] = '\0';
+		//read the text for the window
+		for (fin.get(input); input != '"'; fin.get(input));
+		int k = 0;
+		//read string into texfile
+		for (fin.get(input); input != '"'; fin.get(input)){
+			guiText[k] = input;
+			k++;
+		}
+		guiText[k] = '\0';
+
 		//now create the texture and the image
 		if (j == 0){ //no background image
 			windowArray[i] = new Window();
 			if (!windowArray[i]->Initialize(device, screenWidth, screenHeight, NULL, right - left, bot - top, 0, 0, 1, 1, i, 
-											false, left, top, border))
+											true, left, top, border, guiText))
 			{
 				return false;
 			}
@@ -125,7 +136,7 @@ bool Gui::loadFile(char * filename, ID3D11Device* device){
 			//create window
 			windowArray[i] = new Window();
 			if (!windowArray[i]->Initialize(device, screenWidth, screenHeight, wtexfile, right - left, bot - top, 0, 0, 1, 1, i, 
-											true, left, top, border))
+											true, left, top, border, guiText))
 			{
 				return false;
 			}

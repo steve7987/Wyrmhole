@@ -165,6 +165,9 @@ int Text::GetLength(std::string text){
 	return m_Font->GetLength(text.c_str());
 }
 
+int Text::GetHeight(){
+	return m_Font->GetHeight();
+}
 
 bool Text::InitializeSentence(SentenceType * sentence, int maxLength, ID3D11Device* device){
 	VertexType* vertices;

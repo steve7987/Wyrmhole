@@ -60,6 +60,7 @@ public:
 	//create a space for a sentence and give index so it can be accessed later
 	bool ChangeSentence(int id, std::string text, int positionX, int positionY, float red, float green, float blue);  
 	int GetSentenceLength(std::string text);  //gives how many pixels wide the text will be
+	int GetSentenceHeight();  //gives height of a text character (eventually should take a font type as well)
 	//update sentence with given index
 	void SetVisibleSentence(int id, bool visible);
 	void ClearSentence(int id);  //clear sentence and remove it from the array

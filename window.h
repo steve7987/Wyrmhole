@@ -10,7 +10,9 @@
 
 #define STARTCHILDSIZE 8
 #define BORDERPADDING 6.0f
-#define BORDERFILE L"./border.dds"
+#define BORDERFILE L"./Assets/border.dds"
+
+extern Graphics * g_graphics;
 
 class Window{
 public:
@@ -19,7 +21,7 @@ public:
 
 	bool Initialize(ID3D11Device* device, int screenWidth, int screenHeight, WCHAR* textureFilename, 
 					int bitmapWidth, int bitmapHeight, float tx, float ty, float bx, float by, int idin, bool vis, 
-					int xpos, int ypos, bool hasBorder);  //tx... are texture coords for bitmap
+					int xpos, int ypos, bool hasBorder, std::string text = "");  //tx... are texture coords for bitmap
 	void Shutdown();
 	void setVisible(bool visible);
 	int Frame(int mouseX, int mouseY, Window ** windowList);  //returns -1 if nothing hit, or id of child if child hit, or this windows id
@@ -39,6 +41,8 @@ private:
 	
 	Bitmap * WindowBorder[8];  //clockwise from top left corner
 	ProgressBar * Bar;
+
+	int textId;
 };
 
 #endif

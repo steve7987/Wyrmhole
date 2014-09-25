@@ -36,6 +36,7 @@ public:
 	//update sentence with given index
 	void ClearSentence(int id);  //clear sentence and remove it from the array
 	int GetLength(std::string text);
+	int GetHeight();
 
 	void Shutdown();
 	bool Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX orthoMatrix);

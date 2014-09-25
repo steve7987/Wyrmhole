@@ -16,6 +16,7 @@ class Window;
 #define GUIWINDOW_SELECTIONSTART 6
 #define GUIWINDOW_SELECTIONQUIT 7
 
+
 class Gui{
 private:
 	struct window{

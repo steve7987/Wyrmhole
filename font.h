@@ -38,6 +38,7 @@ public:
 	ID3D11ShaderResourceView* GetTexture();
 
 	int GetLength(const char* sentence);
+	int GetHeight();  //returns height of a line
 
 	void BuildVertexArray(void* vertices, const char* sentence, float drawX, float drawY);
 	//make array for a given sentence at given position

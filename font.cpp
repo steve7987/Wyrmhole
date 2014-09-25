@@ -119,6 +119,10 @@ int Font::GetLength(const char* sentence){
 	return length;
 }
 
+int Font::GetHeight(){
+	return 13;  //should change if more fonts are ever added
+}
+
 bool Font::LoadFontData(char* filename){
 	ifstream fin;
 	char temp;

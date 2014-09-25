@@ -400,6 +400,10 @@ int Graphics::GetSentenceLength(std::string text){
 	return m_Text->GetLength(text);
 }
 
+int Graphics::GetSentenceHeight(){
+	return m_Text->GetHeight();
+}
+
 void Graphics::SetBackground(WCHAR* textureFilename){
 	//first remove old backgroud
 	ClearBackground();

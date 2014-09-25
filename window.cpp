@@ -14,7 +14,7 @@ Window::~Window(){
 
 bool Window::Initialize(ID3D11Device* device, int screenWidth, int screenHeight, WCHAR* textureFilename, 
 					int bitmapWidth, int bitmapHeight, float tx, float ty, float bx, float by, int idin, bool vis, 
-					int xpos, int ypos, bool hasBorder){
+					int xpos, int ypos, bool hasBorder, std::string text){
 	//copy vars
 	id = idin;
 	top = ypos;
@@ -73,6 +73,17 @@ bool Window::Initialize(ID3D11Device* device, int screenWidth, int screenHeight,
 	Bar->Initialize(device, screenWidth, screenHeight, L"./pbar.dds", (float) bitmapWidth, (float) bitmapHeight, (float) xpos, (float) ypos);
 	setProgress(0.0f);  //initially progress bar is empty aka invisible
 
+	//if window has text set it up
+	if (text != ""){
+		textId = g_graphics->RegisterSentence(text.length() + 1);
+		g_graphics->ChangeSentence(textId, text, xpos + bitmapWidth/2 - g_graphics->GetSentenceLength(text)/2, 
+			ypos + bitmapHeight/2 - g_graphics->GetSentenceHeight()/2, 1.0, 1.0, 1.0);
+		g_graphics->SetVisibleSentence(textId, vis);
+	}
+	else {
+		textId = -1;
+	}
+
 	return true;
 }
 
@@ -102,6 +113,9 @@ void Window::Shutdown(){
 
 void Window::setVisible(bool visible){
 	isVisible = visible;
+	if (textId != -1){
+		g_graphics->SetVisibleSentence(textId, visible);
+	}
 }
 
 void Window::setProgress(float amount){
