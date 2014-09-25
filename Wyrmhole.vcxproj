@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="basecamera.h" />
+    <ClInclude Include="billboard.h" />
+    <ClInclude Include="bitmap.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="classlist.h" />
+    <ClInclude Include="collidable.h" />
+    <ClInclude Include="colorshader.h" />
+    <ClInclude Include="d3dgraphics.h" />
+    <ClInclude Include="debris.h" />
+    <ClInclude Include="font.h" />
+    <ClInclude Include="fontshader.h" />
+    <ClInclude Include="fps.h" />
+    <ClInclude Include="gamestate.h" />
+    <ClInclude Include="gamestatemanager.h" />
+    <ClInclude Include="gapp.h" />
+    <ClInclude Include="graphics.h" />
+    <ClInclude Include="gui.h" />
+    <ClInclude Include="helpers.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="level.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="lightshader.h" />
+    <ClInclude Include="mainmenustate.h" />
+    <ClInclude Include="model.h" />
+    <ClInclude Include="modelmanager.h" />
+    <ClInclude Include="progressbar.h" />
+    <ClInclude Include="quaternion.h" />
+    <ClInclude Include="renderable.h" />
+    <ClInclude Include="ring.h" />
+    <ClInclude Include="selectionstate.h" />
+    <ClInclude Include="shield.h" />
+    <ClInclude Include="shieldshader.h" />
+    <ClInclude Include="ship.h" />
+    <ClInclude Include="shot.h" />
+    <ClInclude Include="springcamera.h" />
+    <ClInclude Include="text.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="texturemanager.h" />
+    <ClInclude Include="textureshader.h" />
+    <ClInclude Include="timer.h" />
+    <ClInclude Include="trackline.h" />
+    <ClInclude Include="trackmanager.h" />
+    <ClInclude Include="tracksegment.h" />
+    <ClInclude Include="trackstate.h" />
+    <ClInclude Include="tracktube.h" />
+    <ClInclude Include="vector.h" />
+    <ClInclude Include="window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="billboard.cpp" />
+    <ClCompile Include="bitmap.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="colorshader.cpp" />
+    <ClCompile Include="d3dgraphics.cpp" />
+    <ClCompile Include="debris.cpp" />
+    <ClCompile Include="font.cpp" />
+    <ClCompile Include="fontshader.cpp" />
+    <ClCompile Include="fps.cpp" />
+    <ClCompile Include="gamestatemanager.cpp" />
+    <ClCompile Include="gapp.cpp" />
+    <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="helpers.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="level.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="lightshader.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainmenustate.cpp" />
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="modelmanager.cpp" />
+    <ClCompile Include="progressbar.cpp" />
+    <ClCompile Include="ring.cpp" />
+    <ClCompile Include="selectionstate.cpp" />
+    <ClCompile Include="shield.cpp" />
+    <ClCompile Include="shieldshader.cpp" />
+    <ClCompile Include="ship.cpp" />
+    <ClCompile Include="springcamera.cpp" />
+    <ClCompile Include="text.cpp" />
+    <ClCompile Include="texture.cpp" />
+    <ClCompile Include="texturemanager.cpp" />
+    <ClCompile Include="textureshader.cpp" />
+    <ClCompile Include="timer.cpp" />
+    <ClCompile Include="trackline.cpp" />
+    <ClCompile Include="trackmanager.cpp" />
+    <ClCompile Include="tracksegment.cpp" />
+    <ClCompile Include="trackstate.cpp" />
+    <ClCompile Include="tracktube.cpp" />
+    <ClCompile Include="window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="color.ps" />
+    <None Include="color.vs" />
+    <None Include="font.ps" />
+    <None Include="font.vs" />
+    <None Include="light.ps" />
+    <None Include="light.vs" />
+    <None Include="shield.ps" />
+    <None Include="shield.vs" />
+    <None Include="texture.ps" />
+    <None Include="texture.vs" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CA335710-A529-4040-97F0-B90840E71BD7}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Wyrmhole</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Program Files\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

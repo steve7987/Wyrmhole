@@ -1,0 +1,65 @@
+// pixel shader
+
+//globals
+
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+cbuffer ShieldBuffer
+{
+    float3 direction;
+    float strength;
+};
+
+struct PixelInputType
+{
+    float4 position : SV_POSITION;
+    float2 tex : TEXCOORD0;
+    float3 normal : NORMAL;
+};
+
+float4 ShieldPixelShader(PixelInputType input) : SV_TARGET
+{
+    float4 textureColor;
+    float intensity;
+    float4 color;
+	float scale;
+
+
+    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
+    textureColor = shaderTexture.Sample(SampleType, input.tex);
+	
+	// Set the default output color to white
+    color.r = 1;
+	color.g = 1;
+	color.b = 1;
+	color.a = 1;
+
+
+
+    // Calculate a measure of distance from this pixel to impact point
+    intensity = saturate(dot(input.normal, direction));
+	scale = strength * (intensity+.1) * (intensity  +.1);
+	color = scale*color + (1 - scale)*textureColor;
+	
+	//compute color alpha
+	intensity = 1/(strength*strength)*(intensity - 1) + 1;
+	if(intensity > 0.0f)
+    {
+		if (intensity > 1.0f)
+		{
+			intensity = 1.0f;
+		}
+        // Determine the final diffuse color based on the diffuse color and the amount of light intensity.
+		color.a = intensity;
+    }
+	else 
+	{
+		discard;
+	}
+
+    // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
+    //color = color * textureColor;
+
+    return color;
+}
