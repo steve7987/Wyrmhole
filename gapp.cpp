@@ -100,21 +100,29 @@ bool Gapp::Initialize() {
 		textDump("failed to initialize main menu state");
 		return false;
 	}
-	
 	m_gameStateManager->add("main menu", mms);
 	m_gameStateManager->change("main menu");  //set menu as starting state
+	
 	TrackState * ts = new TrackState();
 	if (!ts || !ts->Initialize()){
 		textDump("failed to initialize track state");
 		return false;
 	}
 	g_gameStateManager->add("track", ts);
+	
 	SelectionState * ss = new SelectionState();
 	if (!ss || !ss->Initialize()){
 		textDump("failed to initialize selection state");
 		return false;
 	}
 	m_gameStateManager->add("selection", ss);
+
+	TestingState * tests = new TestingState();
+	if (!tests || !tests->Initialize()){
+		textDump("failed to initialize testing state");
+		return false;
+	}
+	m_gameStateManager->add("testing", tests);
 
 	textDump("finished main load");
 	return true;

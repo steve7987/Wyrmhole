@@ -224,9 +224,7 @@ void Ship::SetRotation(Quaternion q){
 }
 
 void Ship::Boost(){
-	//boostOn = true;
-	//test to add random shield hit
-	shield->AddHit(Vector(1, 0, 0), randb(2.3,2.8), randb(0.4,1.2));
+	boostOn = true;
 }
 
 void Ship::HorizontalAcceleration(Vector accel){

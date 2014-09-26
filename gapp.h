@@ -20,7 +20,9 @@
 #include "gamestatemanager.h"
 #include "mainmenustate.h"
 #include "selectionstate.h"
+#include "testingstate.h"
 #include "modelmanager.h"
+
 
 extern ModelManager * g_modelManager;
 extern TextureManager * g_textureManager;

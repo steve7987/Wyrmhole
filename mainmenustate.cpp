@@ -36,6 +36,9 @@ bool MainMenuState::update(float t, Input * input){
 		else if (window == GUIWINDOW_MAINMENUQUIT){
 			return false;
 		}
+		else if (window == GUIWINDOW_MAINMENUTESTING){
+			g_gameStateManager->change("testing");
+		}
 	}
 
 	return true;

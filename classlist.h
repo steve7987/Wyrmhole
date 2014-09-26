@@ -34,6 +34,7 @@ class ShieldShader;  //shader used for creating shield effects
 class Ship;  //base object for a ship.  may split off into classes for enemy/other...
 class Shot;  //parent class for any type of weapon the ship shoots
 class SpringCamera;
+class TestingState;  //gamestate used to test different graphics
 class Text;  
 class Texture;  //holds single texture
 class TextureManager;  //keeps track of all textures
