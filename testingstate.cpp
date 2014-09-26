@@ -47,27 +47,22 @@ void TestingState::Shutdown(){
 
 bool TestingState::update(float t, Input * input){
 	rotation += t / 1000.0f;
-	currentShip->SetRotation(Quaternion(Vector(0,1,0), rotation));
+	//currentShip->SetRotation(Quaternion(Vector(0,1,0), rotation));
 	currentShip->DisplayUpdate(t);
-	//change current ship
-	if (input->KeyBeenPushed(0x41)){
-		if (curshipIt == shipList.begin()){
-			curshipIt = shipList.end();
-		}
-		--curshipIt;
-		currentShip = *curshipIt;
+	//move camera
+	if (input->IsKeyDown(0x41)){
+		camera->SetPosition(Quaternion(Vector(0,1,0), t / 1000.f)*camera->GetPosition());
 	}
-	if (input->KeyBeenPushed(0x44)){
-		++curshipIt;
-		if (curshipIt == shipList.end()){
-			curshipIt = shipList.begin();
-		}
-		currentShip = *curshipIt;
+	if (input->IsKeyDown(0x44)){
+		camera->SetPosition(Quaternion(Vector(0,1,0), -1*t / 1000.f)*camera->GetPosition());
 	}
 	if (input->KeyBeenPushed(VK_SPACE)){
 		currentShip->DamageShield(1.0, Vector(1,0,0));
 	}
-	
+
+
+
+
 	//handle state changes
 	if (input->KeyBeenPushed(VK_ESCAPE)){
 		g_gameStateManager->change("main menu");
