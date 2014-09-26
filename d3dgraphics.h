@@ -43,8 +43,9 @@ public:
 	void TurnOnAlphaBlending();
 	void TurnOffAlphaBlending();
 
-	void TurnOnCulling();
-	void TurnOffCulling();
+	void TurnOnCulling();  //gives back face culling
+	void TurnOffCulling();  //no culling
+	void TurnOnFrontFaceCulling();
 
 
 private:
@@ -69,8 +70,9 @@ private:
 	
 	ID3D11DepthStencilView* m_depthStencilView;
 	
-	ID3D11RasterizerState* m_rasterState;
+	ID3D11RasterizerState* m_rasterState;  //back face culling
 	ID3D11RasterizerState* m_rasterStateNoCulling;
+	ID3D11RasterizerState* m_rasterStateFrontFaceCulling;
 
 
 };

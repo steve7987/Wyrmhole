@@ -11,11 +11,14 @@ D3Dgraphics::D3Dgraphics(){
 	m_depthStencilState = 0;
 	m_depthDisabledStencilState = 0;
 	m_depthStencilView = 0;
-	m_rasterState = 0;
+
 
 	m_alphaEnableBlendingState = 0;
 	m_alphaDisableBlendingState = 0;
+
+	m_rasterState = 0;
 	m_rasterStateNoCulling = 0;
+	m_rasterStateFrontFaceCulling = 0;
 }
 
 D3Dgraphics::~D3Dgraphics(){
@@ -353,6 +356,26 @@ bool D3Dgraphics::Initialize(int x, int y, bool vsync, HWND hwnd, bool fullscree
 		textDump("failed to create no back face rasterizer state");
 		return false;
 	}
+
+	// Setup a raster description which turns off front face culling.
+	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
+	rasterDesc.DepthBias = 0;
+	rasterDesc.DepthBiasClamp = 0.0f;
+	rasterDesc.DepthClipEnable = true;
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.FrontCounterClockwise = true;  //switches back and front faces
+	rasterDesc.MultisampleEnable = false;
+	rasterDesc.ScissorEnable = false;
+	rasterDesc.SlopeScaledDepthBias = 0.0f;
+
+	// Create the no culling rasterizer state.
+	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterStateFrontFaceCulling);
+	if(FAILED(result))
+	{
+		textDump("failed to create no front face rasterizer state");
+		return false;
+	}
 	
 	// Setup the viewport for rendering.
 	viewport.Width = (float) x;
@@ -481,6 +504,12 @@ void D3Dgraphics::Shutdown(){
 	{
 		m_rasterStateNoCulling->Release();
 		m_rasterStateNoCulling = 0;
+	}
+
+	if(m_rasterStateFrontFaceCulling)
+	{
+		m_rasterStateFrontFaceCulling->Release();
+		m_rasterStateFrontFaceCulling = 0;
 	}
 
 	if(m_depthStencilView)
@@ -635,6 +664,13 @@ void D3Dgraphics::TurnOffCulling()
 {
 	// Set the no back face culling rasterizer state.
 	m_deviceContext->RSSetState(m_rasterStateNoCulling);
+
+	return;
+}
+
+void D3Dgraphics::TurnOnFrontFaceCulling(){
+	
+	m_deviceContext->RSSetState(m_rasterStateFrontFaceCulling);
 
 	return;
 }
