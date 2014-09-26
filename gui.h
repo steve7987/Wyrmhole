@@ -33,7 +33,7 @@ public:
 	
 
 	int Frame(int mouseX, int mouseY);  //takes mouse x,y and returns window id that mouse is over or -1
-	void setVisible(int windowID, bool visible);
+	void setVisible(int windowID, bool visible);  //sets window and its children visible
 	void setProgressBar(int windowID, float amount);  //amount should be between 0 and 1
 	bool Render(ID3D11DeviceContext* deviceContext, TextureShader * textureShader, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, 
 				D3DXMATRIX orthoMatrix);  //renders all the GUI windows

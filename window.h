@@ -23,7 +23,7 @@ public:
 					int bitmapWidth, int bitmapHeight, float tx, float ty, float bx, float by, int idin, bool vis, 
 					int xpos, int ypos, bool hasBorder, std::string text = "");  //tx... are texture coords for bitmap
 	void Shutdown();
-	void setVisible(bool visible);
+	void setVisible(bool visible, Window** windowList);  //sets this window and its children to be visible
 	int Frame(int mouseX, int mouseY, Window ** windowList);  //returns -1 if nothing hit, or id of child if child hit, or this windows id
 	bool Render(ID3D11DeviceContext* deviceContext, TextureShader * textureShader, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, 
 				D3DXMATRIX orthoMatrix, Window** windowList);  //tells this window to render itself, then renders any children

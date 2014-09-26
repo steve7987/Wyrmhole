@@ -111,10 +111,15 @@ void Window::Shutdown(){
 	}
 }
 
-void Window::setVisible(bool visible){
+void Window::setVisible(bool visible, Window** windowList){
 	isVisible = visible;
 	if (textId != -1){
 		g_graphics->SetVisibleSentence(textId, visible);
+	}
+	for (std::vector<int>::iterator it = kids.begin(); it != kids.end(); it++){
+		if (windowList[*it]){
+			windowList[*it]->setVisible(visible, windowList);
+		}
 	}
 }
 

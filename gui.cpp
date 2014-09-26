@@ -29,10 +29,7 @@ int Gui::Frame(int mouseX, int mouseY){
 }
 
 void Gui::setVisible(int windowID, bool visible){
-	//windowList[windowID].isVisible = visible;
-	//also set bitmap to invisible
-	//m_graphics->SetVisibleBitmap(windowList[windowID].imageIndex, visible);
-	windowArray[windowID]->setVisible(visible);
+	windowArray[windowID]->setVisible(visible, windowArray);
 }
 
 void Gui::setProgressBar(int windowID, float amount){
