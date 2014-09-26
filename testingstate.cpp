@@ -56,6 +56,12 @@ bool TestingState::update(float t, Input * input){
 	if (input->IsKeyDown(0x44)){
 		camera->SetPosition(Quaternion(Vector(0,1,0), -1*t / 1000.f)*camera->GetPosition());
 	}
+	if (input->IsKeyDown(0x53)){
+		camera->SetPosition(Quaternion(Vector(0,1,0).cross(camera->GetPosition()).normalize(), t / 1000.f)*camera->GetPosition());
+	}
+	if (input->IsKeyDown(0x57)){
+		camera->SetPosition(Quaternion(Vector(0,1,0).cross(camera->GetPosition()).normalize(), -1*t / 1000.f)*camera->GetPosition());
+	}
 	if (input->KeyBeenPushed(VK_SPACE)){
 		currentShip->DamageShield(1.0, Vector(1,0,0));
 	}

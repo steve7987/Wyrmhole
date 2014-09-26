@@ -35,6 +35,14 @@ public:
 
 	Vector cross(const Vector& v) const {return Vector(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x); }
 
+	Vector normalize() {
+		float length = sqrt(x*x + y*y + z*z);
+		x = x / length;
+		y = y / length;
+		z = z / length;
+		return Vector(x, y, z);
+	}
+
 	float length() const {return sqrt(x*x + y*y + z*z); }
 };
 

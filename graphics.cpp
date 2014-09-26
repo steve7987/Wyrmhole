@@ -339,7 +339,7 @@ bool Graphics::RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float stren
 bool Graphics::EndFrame(){
 	
 	m_d3d->TurnOnAlphaBlending();
-	m_d3d->TurnOffCulling();  //for the moment alpha objects wont be culled
+	//m_d3d->TurnOffCulling();  //for the moment alpha objects wont be culled
 	//render transparent objects
 	while (!renderQueue.empty()){
 		RenderableType rt = renderQueue.top();
@@ -348,7 +348,7 @@ bool Graphics::EndFrame(){
 		}
 		renderQueue.pop();
 	}
-	m_d3d->TurnOnCulling();
+	//m_d3d->TurnOnCulling();
 	m_d3d->TurnZBufferOff();
 	//render gui
 	if (!g_gui->Render(m_d3d->GetDeviceContext(), m_TextureShader, worldMatrix, baseViewMatrix, orthoMatrix)){
