@@ -48,6 +48,7 @@ void TestingState::Shutdown(){
 bool TestingState::update(float t, Input * input){
 	rotation += t / 1000.0f;
 	currentShip->SetRotation(Quaternion(Vector(0,1,0), rotation));
+	currentShip->DisplayUpdate(t);
 	//change current ship
 	if (input->KeyBeenPushed(0x41)){
 		if (curshipIt == shipList.begin()){
@@ -64,7 +65,7 @@ bool TestingState::update(float t, Input * input){
 		currentShip = *curshipIt;
 	}
 	if (input->KeyBeenPushed(VK_SPACE)){
-		currentShip->Boost();
+		currentShip->DamageShield(1.0, Vector(1,0,0));
 	}
 	
 	//handle state changes

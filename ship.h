@@ -38,8 +38,10 @@ public:
 	
 	void SetTrack(TrackManager * track);
 
-	void Update(float t);
+	void Update(float t);  //updates the ship when in the track state
 	void Render(float t);
+
+	void DisplayUpdate(float t);  //updates the ship when in a display state (e.g. selection state)
 
 	void Boost();
 	void HorizontalAcceleration(Vector accel);

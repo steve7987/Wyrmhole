@@ -131,6 +131,10 @@ void Ship::Update(float t){
 	
 }
 
+void Ship::DisplayUpdate(float t){
+	shield->Update(t);
+}
+
 void Ship::UpdateEngine(float t){
 	engineBB->SetPosition(position + trackRotation*(horizontalOffset) - trackRotation*turnRotation*Vector(2.5, 0, 0));
 	enginet += t;
