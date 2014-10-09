@@ -35,7 +35,7 @@ public:
 private:
 	Vector scale;
 	
-	Model * shieldParts[8];
+	Model * shieldParts[16];
 	//Model * farHalf;
 	//Model * nearHalf;
 	std::list<ShieldType> shieldHits;

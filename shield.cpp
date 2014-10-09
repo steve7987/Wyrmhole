@@ -2,7 +2,7 @@
 
 
 Shield::Shield(){
-	for (int i = 0; i < 8; i++){
+	for (int i = 0; i < 16; i++){
 		shieldParts[i] = 0;
 	}
 }
@@ -14,7 +14,7 @@ Shield::~Shield(){
 
 bool Shield::Initialize(char* modelFilename, WCHAR* textureFilename, Vector shipScale){
 	scale = shipScale;
-	for (int i = 0; i < 8; i++){
+	for (int i = 0; i < 16; i++){
 		shieldParts[i] = new Model();
 		if (!shieldParts[i]) {
 			textDump("Error creating shield model");
@@ -29,7 +29,7 @@ bool Shield::Initialize(char* modelFilename, WCHAR* textureFilename, Vector ship
 }
 
 void Shield::Shutdown(){
-	for (int i = 0; i < 8; i++){
+	for (int i = 0; i < 16; i++){
 		if (shieldParts[i]){
 			shieldParts[i]->Shutdown();
 			delete shieldParts[i];
@@ -86,12 +86,22 @@ void Shield::Render(float t, Vector shipPos, Quaternion shipRot){
 		//set depth squared position
 		Vector offset = 6*shipRot*shieldRot*Vector(ROOT2/2, 0.5, 0.5);
 		shieldParts[i]->SetDepthSqPos(shipPos + offset);
+
+		//setup outerfaceing shield
+		shieldParts[i + 8]->SetPosition(shipPos);
+		shieldParts[i + 8]->SetRotation(shipRot*shieldRot);
+		shieldParts[i + 8]->SetScale(-1*finalScale);
+
+		//set depth squared position slightly higher than normal piece
+		offset = 6.05*shipRot*shieldRot*Vector(ROOT2/2, 0.5, 0.5);
+		shieldParts[i + 8]->SetDepthSqPos(shipPos + offset);
+
 	}
 	
 
 	//render hits on shield parts
 	for (std::list<ShieldType>::iterator it = shieldHits.begin(); it != shieldHits.end(); ++it){
-		for (int i = 0; i < 8; i++){
+		for (int i = 0; i < 16; i++){
 			
 			float * params = new float[4];
 			Vector dir = shipRot*it->direction;

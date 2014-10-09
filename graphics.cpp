@@ -349,9 +349,6 @@ bool Graphics::EndFrame(){
 		renderQueue.pop();
 	}
 	
-	
-
-	
 	m_d3d->TurnZBufferOff();
 	//render gui
 	if (!g_gui->Render(m_d3d->GetDeviceContext(), m_TextureShader, worldMatrix, baseViewMatrix, orthoMatrix)){
