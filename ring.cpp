@@ -75,6 +75,10 @@ bool Ring::CollideWithEllipsoid(Vector point, Vector scale, Quaternion rotation,
 	return CollideWithPoint(point, shot);
 }
 	
-bool Ring::CollideWithLineSegment(Vector start, Vector end, Shot * shot){
+bool Ring::CollideWithLineSegment(Vector start, Vector end, Vector& collisionPoint, Shot * shot){
 	return CollideWithPoint(start, shot) || CollideWithPoint(end, shot);
+}
+
+bool Ring::CollideWithRay(Vector origin, Vector direction, Vector& collisionPoint, Shot * shot){
+	return false;
 }

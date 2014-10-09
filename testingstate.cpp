@@ -64,17 +64,14 @@ bool TestingState::update(float t, Input * input){
 	}
 	//test hitting shields
 	if (input->KeyBeenPushed(VK_SPACE)){
-		currentShip->DamageShield(4.0, Vector(5,0,0));
+		currentShip->DamageShield(12.0, Vector(5,0,0));
 	}
-
-
-
-
 	//handle state changes
 	if (input->KeyBeenPushed(VK_ESCAPE)){
 		g_gameStateManager->change("main menu");
 		return true;
 	}
+	//handle mouse events
 	int mx, my;
 	input->GetMouseLocation(mx, my);
 	int window = g_gui->Frame(mx, my);
@@ -82,6 +79,16 @@ bool TestingState::update(float t, Input * input){
 		if (window == GUIWINDOW_TESTINGQUIT){
 			g_gameStateManager->change("main menu");
 			return true;
+		}
+		else if (window == GUIWINDOW_TESTING){
+			//get mouse ray
+			Vector origin, direction;
+			g_graphics->GetMouseRay(mx, my, origin, direction, camera);
+			//check for ship collision
+			Vector collisionPoint;
+			if (currentShip->CollideWithRay(origin, direction, collisionPoint, NULL)){
+				currentShip->DamageShield(5.0, collisionPoint);
+			}
 		}
 	}
 	return true;

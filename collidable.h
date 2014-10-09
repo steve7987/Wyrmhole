@@ -16,8 +16,11 @@ public:
 	//generally used to see if ship hits the collidable
 	virtual bool CollideWithEllipsoid(Vector point, Vector scale, Quaternion rotation, Shot * shot) = 0;
 
-	//generally used to see if a weapon hits the object
-	virtual bool CollideWithLineSegment(Vector start, Vector end, Shot * shot) = 0;  
+	//see if the object collides with a line segment, gives back the location of the collision
+	virtual bool CollideWithLineSegment(Vector start, Vector end, Vector& collisionPoint, Shot * shot) = 0;  
+
+	//see if the object collides with an infinite ray, gives back the location of the collision
+	virtual bool CollideWithRay(Vector origin, Vector direction, Vector& collisionPoint, Shot * shot) = 0;
 
 	virtual void Shutdown() = 0;
 };

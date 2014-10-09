@@ -28,7 +28,7 @@ extern Graphics * g_graphics;
 
 
 
-class Ship{
+class Ship : public Collidable{
 public:
 	Ship();
 	~Ship();
@@ -38,8 +38,8 @@ public:
 	
 	void SetTrack(TrackManager * track);
 
-	void Update(float t);  //updates the ship when in the track state
-	void Render(float t);
+	bool Update(float t);  //updates the ship when in the track state
+	bool Render(float t);
 
 	void DisplayUpdate(float t);  //updates the ship when in a display state (e.g. selection state)
 
@@ -53,7 +53,12 @@ public:
 
 	void DamageShield(float strength, Vector position);  //position should be in world space
 	
-	
+	//collision detection
+	bool CollideWithPoint(Vector point, Shot * shot); //not implemented
+	bool CollideWithEllipsoid(Vector point, Vector scale, Quaternion rotation, Shot * shot);  //not implemented
+	bool CollideWithLineSegment(Vector start, Vector end, Vector& collisionPoint, Shot * shot);  //not implemented
+	bool CollideWithRay(Vector origin, Vector direction, Vector& collisionPoint, Shot * shot);  //not implemented
+
 	//only used for modeling ship (in selection state), use update during actual game (trackstate)
 	void SetPosition(Vector v);  
 	void SetRotation(Quaternion q);

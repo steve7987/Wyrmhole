@@ -404,7 +404,7 @@ int Graphics::GetSentenceHeight(){
 	return m_Text->GetHeight();
 }
 
-void Graphics::GetMouseRay(int mouseX, int mouseY, Vector& origin, Vector& direction, BaseCamera * cam = NULL){
+void Graphics::GetMouseRay(int mouseX, int mouseY, Vector& origin, Vector& direction, BaseCamera * cam){
 	float pointX, pointY;
 	BaseCamera * currentCam;
 	D3DXMATRIX projectionMatrix, viewMatrix, inverseViewMatrix;

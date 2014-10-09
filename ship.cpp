@@ -63,7 +63,7 @@ void Ship::Shutdown(){
 	}
 }
 
-void Ship::Update(float t){
+bool Ship::Update(float t){
 	shield->Update(t);
 	currentDistance += stats[STAT_FORWARDV] * t / 1000.0f;
 	//compute boost info
@@ -129,6 +129,7 @@ void Ship::Update(float t){
 	boostOn = false;
 	horizontalOn = false;
 	
+	return true;
 }
 
 void Ship::DisplayUpdate(float t){
@@ -180,12 +181,13 @@ void Ship::CheckCollisions(float t){
 	}	
 }
 
-void Ship::Render(float t){
+bool Ship::Render(float t){
 	
 	UpdateEngine(t);
 	g_graphics->RenderObject(model, SHADER_LIGHT);
 	g_graphics->RenderObject(engineBB, SHADER_TEXTURE);
 	shield->Render(t, position + trackRotation*horizontalOffset, trackRotation*turnRotation);
+	return true;
 }
 
 void Ship::SetDistance(float dist){
@@ -344,4 +346,49 @@ void Ship::DamageShield(float strength, Vector position){
 	Vector offset = position - (Ship::position + trackRotation*horizontalOffset);
 	offset = (trackRotation * turnRotation).inverse()*offset;
 	shield->AddHit(offset, 0.25f, strength);
+}
+
+bool Ship::CollideWithPoint(Vector point, Shot * shot){
+	return false;
+}
+	
+bool Ship::CollideWithEllipsoid(Vector point, Vector scale, Quaternion rotation, Shot * shot){
+	return false;
+}
+bool Ship::CollideWithLineSegment(Vector start, Vector end, Vector& collisionPoint, Shot * shot){
+	return false;
+}
+
+bool Ship::CollideWithRay(Vector origin, Vector direction, Vector& collisionPoint, Shot * shot){
+	//translate to center and scale to sphere of radius 1
+	Vector scale = Vector(stats[STAT_SHIELDX], stats[STAT_SHIELDY], stats[STAT_SHIELDZ]);
+	
+	//Vector scale = Vector(1,1,1);
+	origin = origin - position;
+	origin.x = origin.x / scale.x;
+	origin.y = origin.y / scale.y;
+	origin.z = origin.z / scale.z;
+	direction.x = direction.x / scale.x;
+	direction.y = direction.y / scale.y;
+	direction.z = direction.z / scale.z;
+	direction = direction / direction.length();
+	//compute discriminent for intersection test
+	float discrim = (direction * origin) * (direction * origin) - (origin * origin - 1)*(direction * direction);
+
+	if (discrim < 0){
+		return false;
+	}
+	float t = (-1 * direction * origin - sqrt(discrim)) / (direction*direction);
+	if (t < 0){
+		return false;
+	}
+	collisionPoint = origin + t*direction;
+
+	//translate point back
+	collisionPoint.x = collisionPoint.x * scale.x;
+	collisionPoint.y = collisionPoint.y * scale.y;
+	collisionPoint.z = collisionPoint.z * scale.z;
+	collisionPoint = collisionPoint + position;
+
+	return true;
 }

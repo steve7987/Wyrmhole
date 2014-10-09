@@ -55,7 +55,7 @@ bool Debris::CollideWithPoint(Vector point, Shot * shot){
 		hit = true;
 		if (shot == NULL){
 			//hit the ship
-			g_level->GetShip()->DamageShield(0.5f, position);
+			g_level->GetShip()->DamageShield(25.0f, position);
 		}
 		return true;
 	}
@@ -66,6 +66,10 @@ bool Debris::CollideWithEllipsoid(Vector point, Vector scale, Quaternion rotatio
 	return CollideWithPoint(point, shot);
 }
 	
-bool Debris::CollideWithLineSegment(Vector start, Vector end, Shot * shot){
+bool Debris::CollideWithLineSegment(Vector start, Vector end, Vector& collisionPoint, Shot * shot){
 	return false;
 }  
+
+bool Debris::CollideWithRay(Vector origin, Vector direction, Vector& collisionPoint, Shot * shot){
+	return false;
+}

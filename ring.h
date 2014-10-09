@@ -27,8 +27,9 @@ public:
 	bool Render(float t);
 
 	bool CollideWithPoint(Vector point, Shot * shot); 
-	bool CollideWithEllipsoid(Vector point, Vector scale, Quaternion rotation, Shot * shot);
-	bool CollideWithLineSegment(Vector start, Vector end, Shot * shot);  
+	bool CollideWithEllipsoid(Vector point, Vector scale, Quaternion rotation, Shot * shot);  //same as point for now
+	bool CollideWithLineSegment(Vector start, Vector end, Vector& collisionPoint, Shot * shot);  //just checks the ends
+	bool CollideWithRay(Vector origin, Vector direction, Vector& collisionPoint, Shot * shot); //not implemented
 
 private:
 	Model * model;
