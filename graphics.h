@@ -65,7 +65,8 @@ public:
 	void SetVisibleSentence(int id, bool visible);
 	void ClearSentence(int id);  //clear sentence and remove it from the array
 
-
+	//creates a ray into the screen from pixel mouseX, mouseY
+	void GetMouseRay(int mouseX, int mouseY, Vector& origin, Vector& direction, BaseCamera * cam = NULL);
 
 	//background commands
 	void SetBackground(WCHAR* textureFilename);  

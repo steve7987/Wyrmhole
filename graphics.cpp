@@ -404,6 +404,40 @@ int Graphics::GetSentenceHeight(){
 	return m_Text->GetHeight();
 }
 
+void Graphics::GetMouseRay(int mouseX, int mouseY, Vector& origin, Vector& direction, BaseCamera * cam = NULL){
+	float pointX, pointY;
+	BaseCamera * currentCam;
+	D3DXMATRIX projectionMatrix, viewMatrix, inverseViewMatrix;
+
+	if (cam == NULL){
+		currentCam = m_Camera;
+	}
+	else {
+		currentCam = cam;
+	}
+	
+	//change x, y to be in -1, 1 range
+	pointX = ((2.0f * (float)mouseX) / (float)screenWidth) - 1.0f;
+	pointY = (((2.0f * (float)mouseY) / (float)screenHeight) - 1.0f) * -1.0f;
+		
+	// Adjust the points using the projection matrix to account for the aspect ratio of the viewport.
+	m_d3d->GetProjectionMatrix(projectionMatrix);
+	pointX = pointX / projectionMatrix._11;
+	pointY = pointY / projectionMatrix._22;
+
+	// Get the inverse of the view matrix.
+	cam->GetViewMatrix(viewMatrix);
+	D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
+
+	// Calculate the direction of the picking ray in view space.
+	direction.x = (pointX * inverseViewMatrix._11) + (pointY * inverseViewMatrix._21) + inverseViewMatrix._31;
+	direction.y = (pointX * inverseViewMatrix._12) + (pointY * inverseViewMatrix._22) + inverseViewMatrix._32;
+	direction.z = (pointX * inverseViewMatrix._13) + (pointY * inverseViewMatrix._23) + inverseViewMatrix._33;
+
+	//get the origin of the mouse ray which is the location of the camera
+	origin = cam->GetPosition();
+}
+
 void Graphics::SetBackground(WCHAR* textureFilename){
 	//first remove old backgroud
 	ClearBackground();
