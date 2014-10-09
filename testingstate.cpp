@@ -62,8 +62,9 @@ bool TestingState::update(float t, Input * input){
 	if (input->IsKeyDown(0x57)){
 		camera->SetPosition(Quaternion(Vector(0,1,0).cross(camera->GetPosition()).normalize(), -1*t / 1000.f)*camera->GetPosition());
 	}
+	//test hitting shields
 	if (input->KeyBeenPushed(VK_SPACE)){
-		currentShip->DamageShield(1.0, Vector(1,0,0));
+		currentShip->DamageShield(4.0, Vector(5,0,0));
 	}
 
 

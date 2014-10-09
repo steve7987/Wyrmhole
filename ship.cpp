@@ -343,5 +343,5 @@ bool Ship::loadInfo(char * datafile){
 void Ship::DamageShield(float strength, Vector position){
 	Vector offset = position - (Ship::position + trackRotation*horizontalOffset);
 	offset = (trackRotation * turnRotation).inverse()*offset;
-	shield->AddHit(offset, 1.0f, strength);
+	shield->AddHit(offset, 0.25f, strength);
 }

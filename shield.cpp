@@ -42,7 +42,7 @@ void Shield::Shutdown(){
 void Shield::AddHit(Vector direction, float duration, float strength){
 	ShieldType s;
 	s.direction = direction;
-	s.direction = s.direction / s.direction.length();
+	//s.direction = s.direction / s.direction.length();
 	s.duration = duration;
 	s.strength = strength;
 	shieldHits.push_front(s);

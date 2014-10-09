@@ -16,6 +16,7 @@ struct PixelInputType
     float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
+	float4 deltaP : DELTAPOS;
 };
 
 float4 ShieldPixelShader(PixelInputType input) : SV_TARGET
@@ -35,22 +36,19 @@ float4 ShieldPixelShader(PixelInputType input) : SV_TARGET
 	color.b = 1;
 	color.a = 1;
 
+	//calculate distance from this pixel to impact direction
+	float3 dp;
+	dp.x = input.deltaP.x;
+	dp.y = input.deltaP.y;
+	dp.z = input.deltaP.z;
+	float dist = sqrt(dot(dp - direction, dp - direction));
 
-
-    // Calculate a measure of distance from this pixel to impact point
-    intensity = saturate(dot(-1*input.normal, direction)); //-1 since shield points inward
-	scale = strength * (intensity+.1) * (intensity  +.1);
-	color = scale*color + (1 - scale)*textureColor;
-	
-	//compute color alpha
-	intensity = 1/(strength*strength)*(intensity - 1) + 1;
+	intensity = 1 - saturate(dist/strength);
+	intensity = intensity;
+	//color = textureColor;
 	if(intensity > 0.0f)
     {
-		if (intensity > 1.0f)
-		{
-			intensity = 1.0f;
-		}
-        // Determine the final diffuse color based on the diffuse color and the amount of light intensity.
+		color = color * intensity + textureColor * (1 - intensity);
 		color.a = intensity;
     }
 	else 
