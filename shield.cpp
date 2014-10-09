@@ -66,6 +66,7 @@ void Shield::Render(float t, Vector shipPos, Quaternion shipRot){
 		return;
 	}
 	//compute positions of shield parts
+	
 	for (int i = 0; i < 8; i++){
 		Quaternion shieldRot = Quaternion(Vector(0,0,1), i*PI/2);
 		if (i >= 4) shieldRot = shieldRot*Quaternion(Vector(1,0,0), PI);
@@ -83,9 +84,11 @@ void Shield::Render(float t, Vector shipPos, Quaternion shipRot){
 		shieldParts[i]->SetScale(finalScale);
 
 		//set depth squared position
-		Vector offset = 3*shipRot*shieldRot*Vector(ROOT2/2, 0.5, 0.5);
+		Vector offset = 6*shipRot*shieldRot*Vector(ROOT2/2, 0.5, 0.5);
 		shieldParts[i]->SetDepthSqPos(shipPos + offset);
 	}
+	
+
 	//render hits on shield parts
 	for (std::list<ShieldType>::iterator it = shieldHits.begin(); it != shieldHits.end(); ++it){
 		for (int i = 0; i < 8; i++){

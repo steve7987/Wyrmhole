@@ -38,7 +38,7 @@ float4 ShieldPixelShader(PixelInputType input) : SV_TARGET
 
 
     // Calculate a measure of distance from this pixel to impact point
-    intensity = saturate(dot(input.normal, direction));
+    intensity = saturate(dot(-1*input.normal, direction)); //-1 since shield points inward
 	scale = strength * (intensity+.1) * (intensity  +.1);
 	color = scale*color + (1 - scale)*textureColor;
 	
@@ -57,9 +57,6 @@ float4 ShieldPixelShader(PixelInputType input) : SV_TARGET
 	{
 		discard;
 	}
-
-    // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
-    //color = color * textureColor;
 
     return color;
 }
