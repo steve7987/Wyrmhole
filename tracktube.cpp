@@ -249,7 +249,12 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius){
 		Vector v1 = rotation*Vector(0,1,0);
 		Vector v2 = rotation*Vector(0,0,1);
 		for (int k = 0; k < TUBESIDES; k++){
-			vinfo[i*TUBESIDES + k].position = center + radius*(v1*((float)cos(k*2*PI/TUBESIDES)) + v2*((float)sin(k*2*PI/TUBESIDES)));
+			Vector random = Vector(0, 0, 0);
+			if (i != 0 && i != NUMTUBESEGMENTS){
+				//if its not the front or end of the segment add some randomness to look more wormholey
+				random = Vector(randb(-0.1 * radius, 0.1 * radius), randb(-0.1 * radius, 0.1 * radius), randb(-0.1 * radius, 0.1 * radius));
+			}
+			vinfo[i*TUBESIDES + k].position = center + radius*(v1*((float)cos(k*2*PI/TUBESIDES)) + v2*((float)sin(k*2*PI/TUBESIDES))) + random;
 		}
 	}
 	//calculate normals	
