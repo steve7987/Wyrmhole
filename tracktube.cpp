@@ -14,12 +14,12 @@ TrackTube::~TrackTube(){
 }
 	
 bool TrackTube::Initialize(ID3D11Device * device, TrackSegment * segment, WCHAR * textureFilename, float radius, 
-						   float textureRepeat, float startdist, int tubesides, int tubesegments) 
+						   float textureRepeat, float startdist, int tubesides, int tubesegments, float randomness) 
 {
 	numTubeSides = tubesides;
 	numTubeSegments = tubesegments;
 
-	GetVertexInfo(segment, radius);
+	GetVertexInfo(segment, radius, randomness);
 	if (!InitializeBuffers(device, segment, textureRepeat, startdist)){
 		return false;
 	}
@@ -239,7 +239,7 @@ void TrackTube::RenderBuffers(ID3D11DeviceContext * deviceContext){
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void TrackTube::GetVertexInfo(TrackSegment * segment, float radius){
+void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float randomness){
 	vinfo = new VertexInfo[TUBESIDES*(NUMTUBESEGMENTS+1)];
 	//setup verticies
 	double length = segment->GetLength();
@@ -249,12 +249,14 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius){
 		Vector v1 = rotation*Vector(0,1,0);
 		Vector v2 = rotation*Vector(0,0,1);
 		for (int k = 0; k < TUBESIDES; k++){
-			Vector random = Vector(0, 0, 0);
+			Vector randomOffset = Vector(0, 0, 0);
 			if (i != 0 && i != NUMTUBESEGMENTS){
 				//if its not the front or end of the segment add some randomness to look more wormholey
-				random = Vector(randb(-0.1 * radius, 0.1 * radius), randb(-0.1 * radius, 0.1 * radius), randb(-0.1 * radius, 0.1 * radius));
+				randomOffset = Vector(randb(-randomness * radius, randomness * radius), 
+									  randb(-randomness * radius, randomness * radius), 
+									  randb(-randomness * radius, randomness * radius));
 			}
-			vinfo[i*TUBESIDES + k].position = center + radius*(v1*((float)cos(k*2*PI/TUBESIDES)) + v2*((float)sin(k*2*PI/TUBESIDES))) + random;
+			vinfo[i*TUBESIDES + k].position = center + radius*(v1*((float)cos(k*2*PI/TUBESIDES)) + v2*((float)sin(k*2*PI/TUBESIDES))) + randomOffset;
 		}
 	}
 	//calculate normals	

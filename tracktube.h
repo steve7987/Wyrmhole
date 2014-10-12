@@ -36,7 +36,7 @@ public:
 	~TrackTube();
 	
 	bool Initialize(ID3D11Device * device, TrackSegment * segment, WCHAR * textureFilename, float radius, 
-					float textureRepeat, float startdist, int tubesides, int tubesegments);
+					float textureRepeat, float startdist, int tubesides, int tubesegments, float randomness);
 	void Shutdown();
 
 	bool Render(ID3D11DeviceContext * deviceContext, Vector camlook);
@@ -50,7 +50,7 @@ private:
 	bool InitializeBuffers(ID3D11Device * device, TrackSegment * segment, float repeat, float startdist);
 	void RenderBuffers(ID3D11DeviceContext * deviceContext);
 
-	void GetVertexInfo(TrackSegment * segment, float radius);
+	void GetVertexInfo(TrackSegment * segment, float radius, float randomness);
 
 	ID3D11Buffer * m_vertexBuffer;
 	ID3D11Buffer * m_indexBuffer;

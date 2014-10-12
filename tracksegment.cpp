@@ -11,7 +11,7 @@ TrackSegment::~TrackSegment(){
 
 
 bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quaternion beginrot, double startdist, double rad, 
-							  double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile){
+							  double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile, float randomness){
 	this->p1 = p1;
 	this->p2 = p2;
 	this->p3 = p3;
@@ -56,7 +56,7 @@ bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quater
 		textDump("error making track tube");
 		return false;
 	}
-	if (!ttube->Initialize(g_graphics->GetDevice(), this, texturefile, rad, texturerepeat, startdist, tubesides, tubesegments)){
+	if (!ttube->Initialize(g_graphics->GetDevice(), this, texturefile, rad, texturerepeat, startdist, tubesides, tubesegments, randomness)){
 		textDump("error initializing ttube");
 		return false;
 	}

@@ -21,7 +21,7 @@ public:
 	~TrackSegment();
 
 	bool Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quaternion beginrot, double startdist, double rad, 
-					double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile);
+					double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile, float randomness);
 	void Shutdown();
 
 	Vector GetPoint(double distance);  //gives the point at the given distance down the segment

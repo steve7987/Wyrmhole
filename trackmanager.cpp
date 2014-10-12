@@ -57,6 +57,10 @@ bool TrackManager::Initialize(int seed, char * tubedatafile){
 	for (fin.get(input); input != ':'; fin.get(input));
 	int tubesegments;
 	fin >> tubesegments;
+	for (fin.get(input); input != ':'; fin.get(input));
+	float randomness;
+	fin >> randomness;
+
 	fin.close();
 
 
@@ -96,7 +100,7 @@ bool TrackManager::Initialize(int seed, char * tubedatafile){
 			textDump("unable to create track segment");
 			return false;
 		}
-		if (!ts->Initialize(p1, p2, p3, p4, beginrot, startdist, trackRadius, texrepeat, tubesides, tubesegments, wtex)){
+		if (!ts->Initialize(p1, p2, p3, p4, beginrot, startdist, trackRadius, texrepeat, tubesides, tubesegments, wtex, randomness)){
 			textDump("unable to initialize track segment");
 			return false;
 		}
