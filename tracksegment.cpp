@@ -11,7 +11,7 @@ TrackSegment::~TrackSegment(){
 
 
 bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quaternion beginrot, double startdist, double rad, 
-							  double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile, float randomness){
+							  double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile, float randomness, int smoothingPasses){
 	this->p1 = p1;
 	this->p2 = p2;
 	this->p3 = p3;
@@ -56,10 +56,11 @@ bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quater
 		textDump("error making track tube");
 		return false;
 	}
-	if (!ttube->Initialize(g_graphics->GetDevice(), this, texturefile, rad, texturerepeat, startdist, tubesides, tubesegments, randomness)){
+	if (!ttube->Initialize(g_graphics->GetDevice(), this, texturefile, rad, texturerepeat, startdist, tubesides, tubesegments, randomness, smoothingPasses)){
 		textDump("error initializing ttube");
 		return false;
 	}
+	/*
 	//setup rings
 	for (int i = 0; i < 5; i++){
 		Ring * r = new Ring();
@@ -79,6 +80,7 @@ bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quater
 		d->Initialize("./Assets/sphere.txt", L"./Assets/rock.dds", GetPoint(i*length/10) + GetRotation(i*length/5)*offset, GetRotation(i*length/5), Vector(1,1,1));
 		collidables.push_front(d);
 	}
+	*/
 	return true;
 }
 
@@ -166,7 +168,7 @@ double TrackSegment::GetLength(){
 
 void TrackSegment::Render(){
 	//g_graphics->RenderObject(tline, SHADER_COLOR);
-	g_graphics->RenderObject(ttube, SHADER_LIGHT);
+	g_graphics->RenderObject(ttube, SHADER_TEXTURE);
 	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end();++it){
 		if (*it){
 			(*it)->Render(0);	

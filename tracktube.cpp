@@ -14,12 +14,12 @@ TrackTube::~TrackTube(){
 }
 	
 bool TrackTube::Initialize(ID3D11Device * device, TrackSegment * segment, WCHAR * textureFilename, float radius, 
-						   float textureRepeat, float startdist, int tubesides, int tubesegments, float randomness) 
+						   float textureRepeat, float startdist, int tubesides, int tubesegments, float randomness, int smoothingPasses) 
 {
 	numTubeSides = tubesides;
 	numTubeSegments = tubesegments;
 
-	GetVertexInfo(segment, radius, randomness);
+	GetVertexInfo(segment, radius, randomness, smoothingPasses);
 	if (!InitializeBuffers(device, segment, textureRepeat, startdist)){
 		return false;
 	}
@@ -239,7 +239,7 @@ void TrackTube::RenderBuffers(ID3D11DeviceContext * deviceContext){
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float randomness){
+void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float randomness, int smoothingPasses){
 	vinfo = new VertexInfo[TUBESIDES*(NUMTUBESEGMENTS+1)];
 	//setup verticies
 	double length = segment->GetLength();
@@ -267,7 +267,7 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float random
 
 	}
 	//apply smoothing
-	for (int j = 0; j < 10; j++){
+	for (int j = 0; j < smoothingPasses; j++){
 		for (int i = 1; i < NUMTUBESEGMENTS; i++){
 			for (int k = 0; k < TUBESIDES; k++){
 				Vector p0 = vinfo[i*TUBESIDES + k].position;
