@@ -248,17 +248,38 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float random
 		Quaternion rotation = segment->GetRotation(i*length/NUMTUBESEGMENTS);
 		Vector v1 = rotation*Vector(0,1,0);
 		Vector v2 = rotation*Vector(0,0,1);
+		Vector randomOffset = Vector(0, 0, 0);
+		if (i != 0 && i != NUMTUBESEGMENTS && randb(0,1) < randomness){
+			//if its not the front or end of the segment add some randomness to look more wormholey
+			randomOffset = Vector(randb(-randomness * radius, randomness * radius), 
+								  randb(-randomness * radius, randomness * radius), 
+								  randb(-randomness * radius, randomness * radius));
+		}
 		for (int k = 0; k < TUBESIDES; k++){
-			Vector randomOffset = Vector(0, 0, 0);
-			if (i != 0 && i != NUMTUBESEGMENTS){
-				//if its not the front or end of the segment add some randomness to look more wormholey
-				randomOffset = Vector(randb(-randomness * radius, randomness * radius), 
-									  randb(-randomness * radius, randomness * radius), 
-									  randb(-randomness * radius, randomness * radius));
+			
+			vinfo[i*TUBESIDES + k].position = center + radius*(v1*((float)cos(k*2*PI/TUBESIDES)) + v2*((float)sin(k*2*PI/TUBESIDES)));
+		}
+		int start = (int) randb(0, TUBESIDES);
+		int length = (int) randb(0, TUBESIDES);
+		for (int k = 0; k < length; k++){
+			vinfo[i*TUBESIDES + ((k + start)%TUBESIDES)].position = vinfo[i*TUBESIDES + ((k + start)%TUBESIDES)].position + randomOffset;
+		}
+
+	}
+	//apply smoothing
+	for (int j = 0; j < 10; j++){
+		for (int i = 1; i < NUMTUBESEGMENTS; i++){
+			for (int k = 0; k < TUBESIDES; k++){
+				Vector p0 = vinfo[i*TUBESIDES + k].position;
+				Vector pup = vinfo[i*TUBESIDES + (k+1)%TUBESIDES].position;
+				Vector pdown = vinfo[i*TUBESIDES + (k-1+TUBESIDES)%TUBESIDES].position;
+				Vector pright = vinfo[(i+1)*TUBESIDES + k].position;
+				Vector pleft = vinfo[(i-1)*TUBESIDES + k].position;
+				vinfo[i*TUBESIDES + k].position = 0.2*(p0 + pup + pdown + pright + pleft);
 			}
-			vinfo[i*TUBESIDES + k].position = center + radius*(v1*((float)cos(k*2*PI/TUBESIDES)) + v2*((float)sin(k*2*PI/TUBESIDES))) + randomOffset;
 		}
 	}
+
 	//calculate normals	
 	for (int i = 0; i < NUMTUBESEGMENTS + 1; i++){
 		for (int k = 0; k < TUBESIDES; k++){
