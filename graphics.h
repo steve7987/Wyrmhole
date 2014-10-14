@@ -22,6 +22,7 @@
 #include "lightshader.h"
 #include "basecamera.h"
 #include "billboard.h"
+#include "tubeshader.h"
 
 extern Gui * g_gui;
 
@@ -36,6 +37,7 @@ const float SCREEN_NEAR = 0.1f;
 #define SHADER_COLOR 1
 #define SHADER_TEXTURE 2
 #define SHADER_SHIELD 3
+#define SHADER_TUBE 4
 
 class Graphics{
 public:
@@ -78,6 +80,7 @@ private:
 	bool RenderObjectCS(Renderable * m);    //render using color shader
 	bool RenderObjectTS(Renderable * m);	//render using texture shader
 	bool RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float strength);  //render using shield shader
+	bool RenderObjectsTube(Renderable * m);
 
 	D3DXMATRIX viewMatrix, projectionMatrix, orthoMatrix, worldMatrix; //used in rendering a frame
 	
@@ -88,6 +91,7 @@ private:
 	TextureShader * m_TextureShader;
 	LightShader * m_LightShader;
 	ShieldShader * m_ShieldShader;
+	TubeShader * m_TubeShader;
 	D3DXMATRIX baseViewMatrix;  //used for rendering text and gui
 
 	priority_queue<RenderableType, vector<RenderableType>, CompareRenderableType> renderQueue;

@@ -57,6 +57,7 @@
     <ClInclude Include="tracksegment.h" />
     <ClInclude Include="trackstate.h" />
     <ClInclude Include="tracktube.h" />
+    <ClInclude Include="tubeshader.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
@@ -101,6 +102,7 @@
     <ClCompile Include="tracksegment.cpp" />
     <ClCompile Include="trackstate.cpp" />
     <ClCompile Include="tracktube.cpp" />
+    <ClCompile Include="tubeshader.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +116,8 @@
     <None Include="shield.vs" />
     <None Include="texture.ps" />
     <None Include="texture.vs" />
+    <None Include="tube.ps" />
+    <None Include="tube.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CA335710-A529-4040-97F0-B90840E71BD7}</ProjectGuid>

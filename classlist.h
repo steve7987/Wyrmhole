@@ -45,6 +45,7 @@ class TrackManager;  //creates several track segements to make a full track for 
 class TrackSegment;  //keeps data on single piece of game track
 class TrackState;  //currently main game state
 class TrackTube;  //creates and draws the tube that surrounds the track
+class TubeShader;  //shader used for rendering the tube
 class Vector;
 class Window;  //for gui
 

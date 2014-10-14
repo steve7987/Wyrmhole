@@ -109,7 +109,14 @@ bool Graphics::Initialize(int x , int y , HWND hwnd){
 		m_ShieldShader = 0;
 		return false;
 	}
-
+	//create tube shader
+	m_TubeShader = new TubeShader();
+	if(!m_TubeShader || !m_TubeShader->Initialize(m_d3d->GetDevice(), hwnd))
+	{
+		MessageBox(hwnd, L"Could not initialize the tube shader.", L"Error", MB_OK);
+		m_TubeShader = 0;
+		return false;
+	}
 
 	//create the light
 	m_Light = new Light();
@@ -135,7 +142,14 @@ void Graphics::Shutdown(){
 		delete m_Light;
 		m_Light = 0;
 	}
-	textDump("freed light");
+	//release the tube shader object
+	if(m_TubeShader)
+	{
+		m_TubeShader->Shutdown();
+		delete m_TubeShader;
+		m_TubeShader = 0;
+	}
+	
 	//release shield shader
 	if (m_ShieldShader){
 		m_ShieldShader->Shutdown();
@@ -280,6 +294,13 @@ bool Graphics::RenderObjectSwitch(Renderable * m, int shaderType, float * parame
 		delete parameters;
 		return ret;
 		break;
+	case SHADER_TUBE:
+		if (parameters){
+			delete parameters;
+			parameters = 0;
+		}
+		return RenderObjectsTube(m);
+		break;
 	default:
 		textDump("Unknown shader type");
 		return false;
@@ -331,6 +352,19 @@ bool Graphics::RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float stren
 	}
 	bool result = m_ShieldShader->Render(m_d3d->GetDeviceContext(), m->GetIndexCount(), m->GetWorldMatrix(), 
 										viewMatrix, projectionMatrix,m->GetTexture(), direction, strength);
+	if (!result){
+		return false;
+	}
+	return true;
+}
+
+bool Graphics::RenderObjectsTube(Renderable * m){
+	if (!m->Render(m_d3d->GetDeviceContext(), activeCamera->GetLookVector())) {
+		return false;
+	}
+	bool result = m_TubeShader->Render(m_d3d->GetDeviceContext(), m->GetIndexCount(), m->GetWorldMatrix(), 
+										viewMatrix, projectionMatrix,m->GetTexture(), activeLight->GetDirection(),  
+										activeLight->GetDiffuseColor(), activeLight->GetAmbientColor());
 	if (!result){
 		return false;
 	}

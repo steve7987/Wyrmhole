@@ -168,7 +168,7 @@ double TrackSegment::GetLength(){
 
 void TrackSegment::Render(){
 	//g_graphics->RenderObject(tline, SHADER_COLOR);
-	g_graphics->RenderObject(ttube, SHADER_TEXTURE);
+	g_graphics->RenderObject(ttube, SHADER_TUBE);
 	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end();++it){
 		if (*it){
 			(*it)->Render(0);	

@@ -159,6 +159,9 @@
     <ClInclude Include="testingstate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tubeshader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bitmap.cpp">
@@ -284,6 +287,9 @@
     <ClCompile Include="testingstate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tubeshader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="color.ps">
@@ -314,6 +320,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="shield.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tube.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tube.ps">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
