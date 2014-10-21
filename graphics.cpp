@@ -364,7 +364,7 @@ bool Graphics::RenderObjectsTube(Renderable * m){
 	}
 	bool result = m_TubeShader->Render(m_d3d->GetDeviceContext(), m->GetIndexCount(), m->GetWorldMatrix(), 
 										viewMatrix, projectionMatrix,m->GetTexture(), activeLight->GetDirection(),  
-										activeLight->GetDiffuseColor(), activeLight->GetAmbientColor());
+										activeLight->GetDiffuseColor(), activeLight->GetAmbientColor(), activeCamera->GetPosition().d3dvector());
 	if (!result){
 		return false;
 	}
