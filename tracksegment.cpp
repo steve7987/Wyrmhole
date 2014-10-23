@@ -197,3 +197,20 @@ void TrackSegment::Update(float t){
 std::list<Collidable*> * TrackSegment::GetCollidables(){
 	return &collidables;
 }
+
+
+int TrackSegment::GetSegment(float distance){
+	if (distance < startdist + s1){
+		return 1;
+	}
+	else if (distance < startdist + s1 + s2){
+		return 2;
+	}
+	else {
+		return 3;
+	}
+}
+
+Vector TrackSegment::GetCenter(){
+	return center;
+}

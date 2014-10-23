@@ -226,3 +226,8 @@ std::list<Collidable*> * TrackManager::GetCollidables(float distance){
 	}
 	return segmentList.back()->GetCollidables();
 }
+
+
+Vector TrackManager::GetLightDirection(float distance){
+	return GetPoint(distance);
+}

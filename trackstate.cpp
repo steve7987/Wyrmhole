@@ -83,7 +83,9 @@ bool TrackState::update(float t, Input * input){
 	curdist = heroShip->GetDistance();
 	UpdateCamera(t, input);
 	track->Update(curdist, t);
-	tunnelLight->SetDirection(-1*track->GetTangent(curdist));
+	//figure out lighting
+	//tunnelLight->SetDirection(track->GetLightDirection(curdist));
+	tunnelLight->SetDirection(-1*track->GetTangent(curdist + 400));
 	//change display info if needed
 	if ((int) curdist != prevdist){
 		prevdist = (int) curdist;

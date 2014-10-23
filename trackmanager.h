@@ -30,6 +30,8 @@ public:
 	void Render(float distance);
 	void Update(float distance, float t);
 
+	Vector GetLightDirection(float distance);  //calculates position of light for current distance
+
 	std::list<Collidable*> * GetCollidables(float distance);
 
 private:
