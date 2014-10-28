@@ -229,5 +229,30 @@ std::list<Collidable*> * TrackManager::GetCollidables(float distance){
 
 
 Vector TrackManager::GetLightDirection(float distance){
-	return GetPoint(distance);
+	float distCovered = 0;
+	for (std::deque<TrackSegment*>::iterator it = segmentList.begin(); it != segmentList.end(); ++it){
+		if (distCovered + (*it)->GetLength() > distance){
+			if ((*it)->GetSegment(distance - distCovered) == 3){  //in third segment, so advance to next segments circle start and go 400 into it
+				++it;
+				return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + 400);
+			}
+			else if ((*it)->GetSegment(distance - distCovered) == 1){  //in first segment, so just go to circle segment and go 400 into it
+
+				return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + 400);
+			}
+			else {  //in circle portion check where 400 forward is
+				if ((*it)->GetSegment(distance - distCovered + 400) == 2){  //still within circle
+					return -1 * (*it)->GetTangent(distance - distCovered + 400);
+				}
+				else {  //need to advance to next segment
+					float overshoot = distance - distCovered + 400 - (*it)->GetSegmentStart(3);
+					++it;
+					return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + overshoot);
+				}
+			}
+		}
+		distCovered += (*it)->GetLength();
+	}
+	
+	return -1*GetTangent(distance + 400);
 }

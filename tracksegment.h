@@ -37,6 +37,7 @@ public:
 	
 	int GetSegment(float distance);  //returns type of segment corresponding to this distance.  1 = enter line, 2 = circle, 3 = exit line
 	Vector GetCenter();  //returns center of turning circle
+	double GetSegmentStart(int segment);  //gives the start point of the corresponding segment
 
 private:
 	Vector p1, p2, p3, p4;

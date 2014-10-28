@@ -200,10 +200,10 @@ std::list<Collidable*> * TrackSegment::GetCollidables(){
 
 
 int TrackSegment::GetSegment(float distance){
-	if (distance < startdist + s1){
+	if (distance < s1){
 		return 1;
 	}
-	else if (distance < startdist + s1 + s2){
+	else if (distance < s1 + s2){
 		return 2;
 	}
 	else {
@@ -213,4 +213,16 @@ int TrackSegment::GetSegment(float distance){
 
 Vector TrackSegment::GetCenter(){
 	return center;
+}
+
+double TrackSegment::GetSegmentStart(int segment){
+	if (segment < 2){
+		return 0;
+	}
+	else if (segment > 2){
+		return s1 + s2;
+	}
+	else {
+		return s1;
+	}
 }

@@ -84,8 +84,7 @@ bool TrackState::update(float t, Input * input){
 	UpdateCamera(t, input);
 	track->Update(curdist, t);
 	//figure out lighting
-	//tunnelLight->SetDirection(track->GetLightDirection(curdist));
-	tunnelLight->SetDirection(-1*track->GetTangent(curdist + 400));
+	tunnelLight->SetDirection(track->GetLightDirection(curdist));
 	//change display info if needed
 	if ((int) curdist != prevdist){
 		prevdist = (int) curdist;
