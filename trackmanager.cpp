@@ -230,29 +230,40 @@ std::list<Collidable*> * TrackManager::GetCollidables(float distance){
 
 Vector TrackManager::GetLightDirection(float distance){
 	float distCovered = 0;
+	float forwardProj = 150;
 	for (std::deque<TrackSegment*>::iterator it = segmentList.begin(); it != segmentList.end(); ++it){
 		if (distCovered + (*it)->GetLength() > distance){
-			if ((*it)->GetSegment(distance - distCovered) == 3){  //in third segment, so advance to next segments circle start and go 400 into it
+			if ((*it)->GetSegment(distance - distCovered) == 3){  //in third segment, so advance to next segments circle start and go forwardProj into it
 				++it;
-				return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + 400);
+				if (it != segmentList.end()){
+					return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + forwardProj);
+				}
+				else {
+					return -1*GetTangent(distance + forwardProj);
+				}
 			}
-			else if ((*it)->GetSegment(distance - distCovered) == 1){  //in first segment, so just go to circle segment and go 400 into it
+			else if ((*it)->GetSegment(distance - distCovered) == 1){  //in first segment, so just go to circle segment and go forwardProj into it
 
-				return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + 400);
+				return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + forwardProj);
 			}
-			else {  //in circle portion check where 400 forward is
-				if ((*it)->GetSegment(distance - distCovered + 400) == 2){  //still within circle
-					return -1 * (*it)->GetTangent(distance - distCovered + 400);
+			else {  //in circle portion check where forwardProj is
+				if ((*it)->GetSegment(distance - distCovered + forwardProj) == 2){  //still within circle
+					return -1 * (*it)->GetTangent(distance - distCovered + forwardProj);
 				}
 				else {  //need to advance to next segment
-					float overshoot = distance - distCovered + 400 - (*it)->GetSegmentStart(3);
+					float overshoot = distance - distCovered + forwardProj - (*it)->GetSegmentStart(3);
 					++it;
-					return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + overshoot);
+					if (it != segmentList.end()){
+						return -1 * (*it)->GetTangent((*it)->GetSegmentStart(2) + overshoot);
+					}
+					else {
+						return -1*GetTangent(distance + forwardProj);
+					}
 				}
 			}
 		}
 		distCovered += (*it)->GetLength();
 	}
 	
-	return -1*GetTangent(distance + 400);
+	return -1*GetTangent(distance + forwardProj);
 }
