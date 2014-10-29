@@ -39,6 +39,8 @@ private:
 	void UpdateCamera(float t, Input * input);
 	void HandleInput(Input * input);
 
+	void SetLightParameters(char * tubedatafile);
+
 	int tSentence, distSentence, scoreSentence;  //sentences for game state, current distance, and score
 	float curdist;  //distance of ship down the track
 	int prevdist;  //for displaying distance sentence

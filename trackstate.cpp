@@ -35,10 +35,6 @@ bool TrackState::Initialize(){
 		textDump("failed to create tunnel light");
 		return false;
 	}
-	tunnelLight->SetDiffuseColor(0.8f, 0.8f, 0.8f, 1.0f);
-	tunnelLight->SetDirection(0.0f, 0.1f, 0.0f);
-	tunnelLight->SetAmbientColor(0.2f, 0.2f, 0.2f, 1.0f);
-
 	
 
 	//setup cameras
@@ -167,6 +163,9 @@ void TrackState::onEnter(Level * l){
 		return;
 	}
 
+	//set light parameters
+	SetLightParameters("./Assets/tubedata.txt");
+
 	//setup ship
 	heroShip = level->GetShip();
 	heroShip->SetTrack(track);
@@ -206,4 +205,43 @@ void TrackState::UpdateCamera(float t, Input * input){
 	//camera->SetTarget(track->GetPoint(curdist));
 
 	springcam->Update(heroShip->GetPosition(), curdist);
+}
+
+void TrackState::SetLightParameters(char * tubedatafile){
+	tunnelLight->SetDirection(0.0f, 0.1f, 0.0f);
+	ifstream fin;
+	char input;
+	fin.open(tubedatafile);
+	if (fin.fail()){
+		textDump("failed to open tube data file");
+		return;
+	}
+	//scan down to light info, should begin at 12th ':'
+	for (int i = 0; i < 12; i++){
+		for (fin.get(input); input != ':'; fin.get(input));
+	}
+	//read ambient light info
+	float ar;
+	fin >> ar;
+	fin.get(input);
+	float ag;
+	fin >> ag;
+	fin.get(input);
+	float ab;
+	fin >> ab;
+	for (fin.get(input); input != ':'; fin.get(input));
+	//read diffuse info
+	float dr;
+	fin >> dr;
+	fin.get(input);
+	float dg;
+	fin >> dg;
+	fin.get(input);
+	float db;
+	fin >> db;
+
+	fin.close();
+
+	tunnelLight->SetDiffuseColor(dr, dg, db, 1.0f);
+	tunnelLight->SetAmbientColor(ar, ag, ab, 1.0f);
 }
