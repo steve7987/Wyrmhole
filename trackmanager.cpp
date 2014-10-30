@@ -77,7 +77,9 @@ bool TrackManager::Initialize(int seed, char * tubedatafile){
 		//p3 = p2 + d3 + (p2 - p1);
 		Vector tangent = (p2 - p1)/(p2-p1).length();
 		Quaternion tanrot = Quaternion(Vector(1, 0, 0), tangent);
-		Quaternion p3rot = Quaternion(tanrot*Vector(0, 1, 0), randb(-1*turnAngle, turnAngle))*
+		int negative = (rand()%2)*2 - 1;
+
+		Quaternion p3rot = Quaternion(tanrot*Vector(0, 1, 0), negative * turnAngle)*
 						   Quaternion(tanrot*Vector(0, 0, 1), randb(-1*turnAngle, turnAngle));
 		p3 = p2 + p3rot*tangent*randb(minLength, maxLength);
 
