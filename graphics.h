@@ -28,7 +28,7 @@ extern Gui * g_gui;
 
 //global vars for directx settings
 
-const bool FULL_SCREEN = false;
+const bool FULL_SCREEN = true;
 const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 5000.0f;
 const float SCREEN_NEAR = 0.1f;
@@ -80,7 +80,7 @@ private:
 	bool RenderObjectCS(Renderable * m);    //render using color shader
 	bool RenderObjectTS(Renderable * m);	//render using texture shader
 	bool RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float strength);  //render using shield shader
-	bool RenderObjectsTube(Renderable * m);
+	bool RenderObjectsTube(Renderable * m, float textureOffset);
 
 	D3DXMATRIX viewMatrix, projectionMatrix, orthoMatrix, worldMatrix; //used in rendering a frame
 	

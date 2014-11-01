@@ -81,6 +81,8 @@ bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quater
 		collidables.push_front(d);
 	}
 	*/
+	time = 0;
+
 	return true;
 }
 
@@ -168,7 +170,9 @@ double TrackSegment::GetLength(){
 
 void TrackSegment::Render(){
 	//g_graphics->RenderObject(tline, SHADER_COLOR);
-	g_graphics->RenderObject(ttube, SHADER_TUBE);
+	float * params = new float[1];
+	params[0] = time;
+	g_graphics->RenderObject(ttube, SHADER_TUBE, params);
 	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end();++it){
 		if (*it){
 			(*it)->Render(0);	
@@ -177,6 +181,12 @@ void TrackSegment::Render(){
 }
 
 void TrackSegment::Update(float t){
+	//update time for texture offset
+	time += t / 1000.0f;
+	if (time > 1){
+		time -= 1;
+	}
+	
 	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end(); ){
 		if (*it){
 			if (!(*it)->Update(t)){

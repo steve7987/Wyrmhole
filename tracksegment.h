@@ -57,6 +57,8 @@ private:
 
 	std::list<Collidable*> collidables;
 
+	float time;  //used to offset texture
+
 };
 
 #endif

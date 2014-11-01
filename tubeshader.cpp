@@ -31,11 +31,11 @@ void TubeShader::Shutdown(){
 
 bool TubeShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, 
 						 D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
-						 D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition)
+						 D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset)
 {
 	//set shader parameters
 	if (!SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, 
-							 texture, lightDirection, diffuseColor, ambientColor, cameraPosition)){
+							 texture, lightDirection, diffuseColor, ambientColor, cameraPosition, textureOffset)){
 		return false;
 	}
 	//then render
@@ -305,7 +305,7 @@ void TubeShader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, W
 //set global variables for shaders
 bool TubeShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, 
 					   D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
-					   D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition)
+					   D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -385,7 +385,7 @@ bool TubeShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMAT
 
 	// Copy the camera position into the constant buffer.
 	dataPtr3->cameraPosition = cameraPosition;
-	dataPtr3->padding = 0.0f;
+	dataPtr3->textureOffset = textureOffset;
 
 	// Unlock the camera constant buffer.
 	deviceContext->Unmap(m_cameraBuffer, 0);

@@ -295,11 +295,13 @@ bool Graphics::RenderObjectSwitch(Renderable * m, int shaderType, float * parame
 		return ret;
 		break;
 	case SHADER_TUBE:
-		if (parameters){
-			delete parameters;
-			parameters = 0;
+		if (!parameters){
+			textDump("bad params for tube shader");
+			return false;
 		}
-		return RenderObjectsTube(m);
+		ret = RenderObjectsTube(m, parameters[0]);
+		delete parameters;
+		return ret;
 		break;
 	default:
 		textDump("Unknown shader type");
@@ -358,13 +360,13 @@ bool Graphics::RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float stren
 	return true;
 }
 
-bool Graphics::RenderObjectsTube(Renderable * m){
+bool Graphics::RenderObjectsTube(Renderable * m, float textureOffset){
 	if (!m->Render(m_d3d->GetDeviceContext(), activeCamera->GetLookVector())) {
 		return false;
 	}
 	bool result = m_TubeShader->Render(m_d3d->GetDeviceContext(), m->GetIndexCount(), m->GetWorldMatrix(), 
 										viewMatrix, projectionMatrix,m->GetTexture(), activeLight->GetDirection(),  
-										activeLight->GetDiffuseColor(), activeLight->GetAmbientColor(), activeCamera->GetPosition().d3dvector());
+										activeLight->GetDiffuseColor(), activeLight->GetAmbientColor(), activeCamera->GetPosition().d3dvector(), textureOffset);
 	if (!result){
 		return false;
 	}

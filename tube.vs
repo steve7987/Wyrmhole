@@ -12,7 +12,7 @@ cbuffer MatrixBuffer
 cbuffer CameraBuffer
 {
     float3 cameraPosition;
-    float padding;
+    float textureOffset;
 };
 
 //structs
@@ -49,6 +49,7 @@ PixelInputType TubeVertexShader(VertexInputType input)
     
     // Store the texture coordinates for the pixel shader.
     output.tex = input.tex;
+	output.tex.x += textureOffset;
     
     // Calculate the normal vector against the world matrix only.
     output.normal = mul(input.normal, (float3x3)worldMatrix);

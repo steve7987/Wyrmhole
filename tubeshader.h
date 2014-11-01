@@ -30,7 +30,7 @@ private:
 	struct CameraBufferType
 	{
 		D3DXVECTOR3 cameraPosition;
-		float padding;
+		float textureOffset;
 	};
 
 public:
@@ -41,11 +41,12 @@ public:
 	void Shutdown();
 	bool Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, 
 			    D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
-				D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition);
+				D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset);
 	bool SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, 
 					   D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
-					   D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition);
+					   D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset);
 	void RenderShader(ID3D11DeviceContext* deviceContext, int indexCount);
+
 
 private:
 	bool InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename);
@@ -64,6 +65,7 @@ private:
 	ID3D11SamplerState* m_sampleState;
 	//new from texture shader:  buffer to hold global light variables for the shader
 	ID3D11Buffer* m_lightBuffer;
+
 };
 
 #endif
