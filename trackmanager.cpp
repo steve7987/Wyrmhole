@@ -63,6 +63,8 @@ bool TrackManager::Initialize(int seed, char * tubedatafile){
 	for (fin.get(input); input != ':'; fin.get(input));
 	int smoothingPasses;
 	fin >> smoothingPasses;
+	for (fin.get(input); input != ':'; fin.get(input));
+	fin >> forwardProj;
 	fin.close();
 
 
@@ -232,7 +234,6 @@ std::list<Collidable*> * TrackManager::GetCollidables(float distance){
 
 Vector TrackManager::GetLightDirection(float distance){
 	float distCovered = 0;
-	float forwardProj = 150;
 	for (std::deque<TrackSegment*>::iterator it = segmentList.begin(); it != segmentList.end(); ++it){
 		if (distCovered + (*it)->GetLength() > distance){
 			if ((*it)->GetSegment(distance - distCovered) == 3){  //in third segment, so advance to next segments circle start and go forwardProj into it

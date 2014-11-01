@@ -39,6 +39,7 @@ private:
 	std::deque<TrackSegment*> segmentList;
 	float totalLength;
 	float trackRadius;  //radius of the tube
+	float forwardProj;  //distance to place light source ahead of ship
 };
 
 

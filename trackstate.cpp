@@ -216,8 +216,8 @@ void TrackState::SetLightParameters(char * tubedatafile){
 		textDump("failed to open tube data file");
 		return;
 	}
-	//scan down to light info, should begin at 12th ':'
-	for (int i = 0; i < 12; i++){
+	//scan down to light info, should begin at 13th ':'
+	for (int i = 0; i < 13; i++){
 		for (fin.get(input); input != ':'; fin.get(input));
 	}
 	//read ambient light info
