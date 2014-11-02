@@ -67,11 +67,16 @@ PixelInputType TubeVertexShader(VertexInputType input)
 	oldCenter.y = 0;
 	oldCenter.z = 0;
 	oldCenter = oldCenter * input.distance;
+
+	//input.distance -= textureOffset;
+
 	if (input.distance <= s1){
 		float t = input.distance / s1;
 		input.position.x = input.position.x - oldCenter.x + (1 - t)*p1.x + t*p2.x;
 		input.position.y = input.position.y - oldCenter.y + (1 - t)*p1.y + t*p2.y;
 		input.position.z = input.position.z - oldCenter.z + (1 - t)*p1.z + t*p2.z;
+
+		output.normal = input.normal;
 	}
 	else if (input.distance <= s1 + s2){
 		float t = (input.distance - s1) / s2 * maxAngle;
@@ -104,6 +109,8 @@ PixelInputType TubeVertexShader(VertexInputType input)
 		input.position.y = rotated.y + Center.y + offset.y; 
 		input.position.z = rotated.z + Center.z + offset.z; 
 
+		output.normal = mul(input.normal, rotationMatrix);
+
 	}
 	else {
 		float t = maxAngle;
@@ -134,6 +141,8 @@ PixelInputType TubeVertexShader(VertexInputType input)
 		input.position.x = rotated.x + (1 - s)*p3.x + s*p4.x;
 		input.position.y = rotated.y + (1 - s)*p3.y + s*p4.y;
 		input.position.z = rotated.z + (1 - s)*p3.z + s*p4.z;
+
+		output.normal = mul(input.normal, rotationMatrix);
 	}
 
 
@@ -148,7 +157,7 @@ PixelInputType TubeVertexShader(VertexInputType input)
 	output.tex.x += textureOffset;
     
     // Calculate the normal vector against the world matrix only.
-    output.normal = mul(input.normal, (float3x3)worldMatrix);
+    //output.normal = mul(input.normal, (float3x3)worldMatrix);
 	
     // Normalize the normal vector.
     output.normal = normalize(output.normal);
