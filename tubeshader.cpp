@@ -9,6 +9,7 @@ TubeShader::TubeShader(){
 	m_sampleState = 0;
 	m_lightBuffer = 0;
 	m_cameraBuffer = 0;
+	m_tubeLayoutBuffer = 0;
 }
 
 TubeShader::~TubeShader(){
@@ -31,11 +32,15 @@ void TubeShader::Shutdown(){
 
 bool TubeShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, 
 						 D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
-						 D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset)
+						 D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset, 
+						 D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR3 p3, D3DXVECTOR3 p4,
+					     D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3)
 {
 	//set shader parameters
 	if (!SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, 
-							 texture, lightDirection, diffuseColor, ambientColor, cameraPosition, textureOffset)){
+							 texture, lightDirection, diffuseColor, ambientColor, cameraPosition, 
+							 textureOffset, p1, p2, p3, p4, Center, v1, v2, s1, s2, s3))
+	{
 		return false;
 	}
 	//then render
@@ -56,6 +61,7 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 	D3D11_SAMPLER_DESC samplerDesc;  //new from color shader
 	D3D11_BUFFER_DESC lightBufferDesc;  //new from texture shader
 	D3D11_BUFFER_DESC cameraBufferDesc;
+	D3D11_BUFFER_DESC tubeLayoutBufferDesc;
 
 	//initialize the pointers this function will use to null.
 	errorMessage = 0;
@@ -115,8 +121,6 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 		return false;
 	}
 
-	textDump("setting polygon");
-
 	//create data layout for vertex shader, needs to match vertexType struct in model class and in the shader
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
@@ -161,11 +165,8 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 					   vertexShaderBuffer->GetBufferSize(), &m_layout);
 	if(FAILED(result))
 	{
-		textDump("failed making input layout");
 		return false;
 	}
-
-	textDump("setting buffers");
 
 	//release vertex and pixel shaders data
 	vertexShaderBuffer->Release();
@@ -224,6 +225,21 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 		return false;
 	}
 
+	//setup tube layout buffer
+	tubeLayoutBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	tubeLayoutBufferDesc.ByteWidth = sizeof(TubeLayoutBufferType);
+	tubeLayoutBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	tubeLayoutBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	tubeLayoutBufferDesc.MiscFlags = 0;
+	tubeLayoutBufferDesc.StructureByteStride = 0;
+
+	// Create the tube layout constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+	result = device->CreateBuffer(&tubeLayoutBufferDesc, NULL, &m_tubeLayoutBuffer);
+	if(FAILED(result))
+	{
+		return false;
+	}
+
 	//setup light buffer for pixel shader.  note byteWidth needs to be multiple of 16
 	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	lightBufferDesc.ByteWidth = sizeof(LightBufferType);
@@ -243,6 +259,11 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 }
 
 void TubeShader::ShutdownShader(){
+	if (m_tubeLayoutBuffer){
+		m_tubeLayoutBuffer->Release();
+		m_tubeLayoutBuffer = 0;
+	}
+	
 	if (m_cameraBuffer){
 		m_cameraBuffer->Release();
 		m_cameraBuffer = 0;
@@ -321,13 +342,16 @@ void TubeShader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, W
 //set global variables for shaders
 bool TubeShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, 
 					   D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
-					   D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset)
+					   D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset,
+					   D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR3 p3, D3DXVECTOR3 p4,
+					   D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	LightBufferType* dataPtr2;
 	CameraBufferType* dataPtr3;
+	TubeLayoutBufferType * dataPtr4;
 	unsigned int bufferNumber;
 
 	// Transpose the matrices to prepare them for the shader. required for directx11
@@ -411,6 +435,40 @@ bool TubeShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMAT
 	// Now set the camera constant buffer in the vertex shader with the updated values.
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_cameraBuffer);
 
+	
+	// Lock the tube layout constant buffer so it can be written to.
+	result = deviceContext->Map(m_tubeLayoutBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if(FAILED(result))
+	{
+		return false;
+	}
+	// Get a pointer to the data in the constant buffer.
+	dataPtr4 = (TubeLayoutBufferType*)mappedResource.pData;
+
+	// Copy the camera position into the constant buffer.
+	dataPtr4->p1 = p1;
+	dataPtr4->p2 = p2;
+	dataPtr4->p3 = p3;
+	dataPtr4->p4 = p4;
+	dataPtr4->Center = Center;
+	dataPtr4->v1 = v1;
+	dataPtr4->v2 = v2;
+	dataPtr4->s1 = s1;
+	dataPtr4->s2 = s2;
+	dataPtr4->s3 = s3;
+	dataPtr4->maxAngle = 3.00215;
+	dataPtr4->radius = 175.1;
+	dataPtr4->pad1 = 0.0f;
+	dataPtr4->pad2 = 0.0f;
+
+	// Unlock the tube layout constant buffer.
+	deviceContext->Unmap(m_tubeLayoutBuffer, 0);
+	// Set the position of the tube layout constant buffer in the vertex shader.
+	bufferNumber = 2;
+
+	// Now set the camera constant buffer in the vertex shader with the updated values.
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_tubeLayoutBuffer);
+	
 	return true;
 }
 

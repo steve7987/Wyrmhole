@@ -299,7 +299,10 @@ bool Graphics::RenderObjectSwitch(Renderable * m, int shaderType, float * parame
 			textDump("bad params for tube shader");
 			return false;
 		}
-		ret = RenderObjectsTube(m, parameters[0]);
+		ret = RenderObjectTube(m, parameters[0], D3DXVECTOR3(parameters[1], parameters[2], parameters[3]), D3DXVECTOR3(parameters[4], parameters[5], parameters[6]),
+							   D3DXVECTOR3(parameters[7], parameters[8], parameters[9]), D3DXVECTOR3(parameters[10], parameters[11], parameters[12]),
+							   D3DXVECTOR3(parameters[13], parameters[14], parameters[15]), D3DXVECTOR3(parameters[16], parameters[17], parameters[18]),
+							   D3DXVECTOR3(parameters[19], parameters[20], parameters[21]), parameters[22], parameters[23], parameters[24]);
 		delete parameters;
 		return ret;
 		break;
@@ -360,13 +363,16 @@ bool Graphics::RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float stren
 	return true;
 }
 
-bool Graphics::RenderObjectsTube(Renderable * m, float textureOffset){
+bool Graphics::RenderObjectTube(Renderable * m, float textureOffset, D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR3 p3, D3DXVECTOR3 p4,
+						   D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3)
+{
 	if (!m->Render(m_d3d->GetDeviceContext(), activeCamera->GetLookVector())) {
 		return false;
 	}
 	bool result = m_TubeShader->Render(m_d3d->GetDeviceContext(), m->GetIndexCount(), m->GetWorldMatrix(), 
 										viewMatrix, projectionMatrix,m->GetTexture(), activeLight->GetDirection(),  
-										activeLight->GetDiffuseColor(), activeLight->GetAmbientColor(), activeCamera->GetPosition().d3dvector(), textureOffset);
+										activeLight->GetDiffuseColor(), activeLight->GetAmbientColor(), activeCamera->GetPosition().d3dvector(), textureOffset, 
+										p1, p2, p3, p4, Center, v1, v2, s1, s2, s3);
 	if (!result){
 		return false;
 	}

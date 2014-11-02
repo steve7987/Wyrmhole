@@ -80,7 +80,8 @@ private:
 	bool RenderObjectCS(Renderable * m);    //render using color shader
 	bool RenderObjectTS(Renderable * m);	//render using texture shader
 	bool RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float strength);  //render using shield shader
-	bool RenderObjectsTube(Renderable * m, float textureOffset);
+	bool RenderObjectTube(Renderable * m, float textureOffset, D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR3 p3, D3DXVECTOR3 p4,
+						   D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3);
 
 	D3DXMATRIX viewMatrix, projectionMatrix, orthoMatrix, worldMatrix; //used in rendering a frame
 	
