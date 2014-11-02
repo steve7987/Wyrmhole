@@ -50,7 +50,7 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[3];  //changed to 3 to accomodate position uv and normal
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[4];  //changed to 4 to accomodate position, uv, normal, distance
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;  //new from color shader
@@ -115,6 +115,8 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 		return false;
 	}
 
+	textDump("setting polygon");
+
 	//create data layout for vertex shader, needs to match vertexType struct in model class and in the shader
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
@@ -141,6 +143,16 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[2].InstanceDataStepRate = 0;
 
+	//adding distance measure to polygon layout
+	
+	polygonLayout[3].SemanticName = "POSITION";
+	polygonLayout[3].SemanticIndex = 1;
+	polygonLayout[3].Format = DXGI_FORMAT_R32_FLOAT;
+	polygonLayout[3].InputSlot = 0;
+	polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	polygonLayout[3].InstanceDataStepRate = 0;
+	
 	//count number of items in the layout
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
@@ -149,8 +161,12 @@ bool TubeShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFile
 					   vertexShaderBuffer->GetBufferSize(), &m_layout);
 	if(FAILED(result))
 	{
+		textDump("failed making input layout");
 		return false;
 	}
+
+	textDump("setting buffers");
+
 	//release vertex and pixel shaders data
 	vertexShaderBuffer->Release();
 	vertexShaderBuffer = 0;

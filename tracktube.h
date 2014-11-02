@@ -23,12 +23,14 @@ private:
 	struct VertexInfo{
 		Vector position;
 		Vector normal;
+		float distance;
 	};
 
 	struct VertexType{
 		D3DXVECTOR3 position;
 		D3DXVECTOR2 texture;
 		D3DXVECTOR3 normal;
+		float distance;
 	};
 
 public:

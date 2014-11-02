@@ -28,7 +28,7 @@ extern Gui * g_gui;
 
 //global vars for directx settings
 
-const bool FULL_SCREEN = true;
+const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 5000.0f;
 const float SCREEN_NEAR = 0.1f;

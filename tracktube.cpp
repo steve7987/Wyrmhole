@@ -97,32 +97,38 @@ bool TrackTube::InitializeBuffers(ID3D11Device * device, TrackSegment * segment,
 			vertices[6*(TUBESIDES*i + k) + 0].position = vinfo[i*TUBESIDES + k].position.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 0].normal = vinfo[i*TUBESIDES + k].normal.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 0].texture = D3DXVECTOR2((float)(curlength/repeat), (1.0f*k)/TUBESIDES);
+			vertices[6*(TUBESIDES*i + k) + 0].distance = vinfo[i*TUBESIDES + k].distance;
 
 			//bottom right
 			vertices[6*(TUBESIDES*i + k) + 1].position = vinfo[(i+1)*TUBESIDES + k].position.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 1].normal = vinfo[(i+1)*TUBESIDES + k].normal.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 1].texture = D3DXVECTOR2((float)((curlength+seglength)/repeat), (1.0f*k)/TUBESIDES);
+			vertices[6*(TUBESIDES*i + k) + 1].distance = vinfo[(i+1)*TUBESIDES + k].distance;
 
 			//top left
 			vertices[6*(TUBESIDES*i + k) + 2].position = vinfo[i*TUBESIDES + k + 1].position.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 2].normal = vinfo[i*TUBESIDES + k + 1].normal.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 2].texture = D3DXVECTOR2((float)(curlength/repeat), (1.0f*(k+1))/TUBESIDES);
+			vertices[6*(TUBESIDES*i + k) + 2].distance = vinfo[i*TUBESIDES + k + 1].distance;
 
 			//second tri 
 			//top left
 			vertices[6*(TUBESIDES*i + k) + 3].position = vinfo[i*TUBESIDES + k + 1].position.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 3].normal = vinfo[i*TUBESIDES + k + 1].normal.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 3].texture = D3DXVECTOR2((float)(curlength/repeat), (1.0f*(k+1))/TUBESIDES);
+			vertices[6*(TUBESIDES*i + k) + 3].distance = vinfo[i*TUBESIDES + k + 1].distance;
 
 			//bottom right
 			vertices[6*(TUBESIDES*i + k) + 4].position = vinfo[(i+1)*TUBESIDES + k].position.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 4].normal = vinfo[(i+1)*TUBESIDES + k].normal.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 4].texture = D3DXVECTOR2((float)((curlength+seglength)/repeat), (1.0f*k)/TUBESIDES);
+			vertices[6*(TUBESIDES*i + k) + 4].distance = vinfo[(i+1)*TUBESIDES + k].distance;
 
 			//top right
 			vertices[6*(TUBESIDES*i + k) + 5].position = vinfo[(i+1)*TUBESIDES + k + 1].position.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 5].normal = vinfo[(i+1)*TUBESIDES + k + 1].normal.d3dvector();
 			vertices[6*(TUBESIDES*i + k) + 5].texture = D3DXVECTOR2((float)((curlength+seglength)/repeat), (1.0f*(k+1))/TUBESIDES);
+			vertices[6*(TUBESIDES*i + k) + 5].distance = vinfo[(i+1)*TUBESIDES + k + 1].distance;
 		}
 		
 		//handle kth side differently since it wraps around and texture coords and vertex position dont match formula
@@ -130,32 +136,39 @@ bool TrackTube::InitializeBuffers(ID3D11Device * device, TrackSegment * segment,
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 0].position = vinfo[i*TUBESIDES + TUBESIDES - 1].position.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 0].normal = vinfo[i*TUBESIDES + TUBESIDES - 1].normal.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 0].texture = D3DXVECTOR2((float)(curlength/repeat), (1.0f*(TUBESIDES - 1))/TUBESIDES);
+		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 0].distance = vinfo[i*TUBESIDES + TUBESIDES - 1].distance;
 
 		//bottom right
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 1].position = vinfo[(i+1)*TUBESIDES + TUBESIDES - 1].position.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 1].normal = vinfo[(i+1)*TUBESIDES + TUBESIDES - 1].normal.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 1].texture = D3DXVECTOR2((float)((curlength+seglength)/repeat), (1.0f*(TUBESIDES - 1))/TUBESIDES);
+		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 1].distance = vinfo[(i+1)*TUBESIDES + TUBESIDES - 1].distance;
 
 		//top left
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 2].position = vinfo[i*TUBESIDES + 0].position.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 2].normal = vinfo[i*TUBESIDES + 0].normal.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 2].texture = D3DXVECTOR2((float)(curlength/repeat), 1.0f);
+		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 2].distance = vinfo[i*TUBESIDES + 0].distance;
 
 		//second tri 
 		//top left
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 3].position = vinfo[i*TUBESIDES + 0].position.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 3].normal = vinfo[i*TUBESIDES + 0].normal.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 3].texture = D3DXVECTOR2((float)(curlength/repeat), 1.0f);
+		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 3].distance = vinfo[i*TUBESIDES + 0].distance;
 
 		//bottom right
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 4].position = vinfo[(i+1)*TUBESIDES + TUBESIDES - 1].position.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 4].normal = vinfo[(i+1)*TUBESIDES + TUBESIDES - 1].normal.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 4].texture = D3DXVECTOR2((float)((curlength+seglength)/repeat), (1.0f*(TUBESIDES - 1))/TUBESIDES);
+		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 4].distance = vinfo[(i+1)*TUBESIDES + TUBESIDES - 1].distance;
 
 		//top right
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 5].position = vinfo[(i+1)*TUBESIDES + 0].position.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 5].normal = vinfo[(i+1)*TUBESIDES + 0].normal.d3dvector();
 		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 5].texture = D3DXVECTOR2((float)((curlength+seglength)/repeat), 1.0f);
+		vertices[6*(TUBESIDES*i + TUBESIDES - 1) + 5].distance = vinfo[(i+1)*TUBESIDES + 0].distance;
+
 		curlength += seglength;
 
 	}
@@ -244,10 +257,11 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float random
 	//setup verticies
 	double length = segment->GetLength();
 	for (int i = 0; i < NUMTUBESEGMENTS + 1; i++){
-		Vector center = segment->GetPoint(i*length/NUMTUBESEGMENTS);
+		float distanceDownTube = segment->GetLength()*((float)i/NUMTUBESEGMENTS);
+		Vector center = Vector(1,0,0)*distanceDownTube;//segment->GetPoint(i*length/NUMTUBESEGMENTS);
 		Quaternion rotation = segment->GetRotation(i*length/NUMTUBESEGMENTS);
-		Vector v1 = rotation*Vector(0,1,0);
-		Vector v2 = rotation*Vector(0,0,1);
+		Vector v1 = Vector(0,1,0);//rotation*Vector(0,1,0);
+		Vector v2 = Vector(0,0,1);//rotation*Vector(0,0,1);
 		Vector randomOffset = Vector(0, 0, 0);
 		if (i != 0 && i != NUMTUBESEGMENTS && randb(0,1) < randomness){
 			//if its not the front or end of the segment add some randomness to look more wormholey
@@ -256,8 +270,8 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float random
 								  randb(-randomness * radius, randomness * radius));
 		}
 		for (int k = 0; k < TUBESIDES; k++){
-			
 			vinfo[i*TUBESIDES + k].position = center + radius*(v1*((float)cos(k*2*PI/TUBESIDES)) + v2*((float)sin(k*2*PI/TUBESIDES)));
+			vinfo[i*TUBESIDES + k].distance = distanceDownTube;
 		}
 		int start = (int) randb(0, TUBESIDES);
 		int length = (int) randb(0, TUBESIDES);
