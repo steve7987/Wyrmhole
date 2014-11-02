@@ -75,20 +75,71 @@ PixelInputType TubeVertexShader(VertexInputType input)
 	}
 	else if (input.distance <= s1 + s2){
 		float t = (input.distance - s1) / s2 * maxAngle;
-		input.position.x = input.position.x - oldCenter.x + Center.x + radius*(v1.x*cos(t) + v2.x*sin(t));
-		input.position.y = input.position.y - oldCenter.y + Center.y + radius*(v1.y*cos(t) + v2.y*sin(t));
-		input.position.z = input.position.z - oldCenter.z + Center.z + radius*(v1.z*cos(t) + v2.z*sin(t));
+		float3 offset = radius*(v1*cos(t) + v2*sin(t));
+		
+		//compute rotation matrix
+		float3 u = normalize(cross(v2, v1));  //rotation axis
+		float3x3 rotationMatrix;
+		rotationMatrix._11 = cos(t) + u.x*u.x*(1-cos(t));
+		rotationMatrix._12 = u.x*u.y*(1-cos(t)) - u.z*sin(t);
+		rotationMatrix._13 = u.x*u.z*(1-cos(t)) + u.y*sin(t);
+
+		rotationMatrix._21 = u.y*u.x*(1-cos(t)) + u.z*sin(t);
+		rotationMatrix._22 = cos(t) + u.y*u.y*(1-cos(t));
+		rotationMatrix._23 = u.y*u.z*(1-cos(t)) - u.x*sin(t);
+
+		rotationMatrix._31 = u.z*u.x*(1-cos(t)) - u.y*sin(t);
+		rotationMatrix._32 = u.z*u.y*(1-cos(t)) + u.x*sin(t);
+		rotationMatrix._33 = cos(t) + u.z*u.z*(1-cos(t));
+
+		//rotated ring of the tube
+		float3 rotated;
+		rotated.x = input.position.x - oldCenter.x;
+		rotated.y = input.position.y - oldCenter.y;
+		rotated.z = input.position.z - oldCenter.z;
+		rotated = mul(rotated, rotationMatrix);
+		
+		//compute final position
+		input.position.x = rotated.x + Center.x + offset.x; 
+		input.position.y = rotated.y + Center.y + offset.y; 
+		input.position.z = rotated.z + Center.z + offset.z; 
+
 	}
 	else {
-		float t = (input.distance - s1 - s2) / s3;
-		input.position.x = input.position.x - oldCenter.x + (1 - t)*p3.x + t*p4.x;
-		input.position.y = input.position.y - oldCenter.y + (1 - t)*p3.y + t*p4.y;
-		input.position.z = input.position.z - oldCenter.z + (1 - t)*p3.z + t*p4.z;
+		float t = maxAngle;
+		//compute rotation matrix
+		float3 u = normalize(cross(v2, v1));  //rotation axis
+		float3x3 rotationMatrix;
+		rotationMatrix._11 = cos(t) + u.x*u.x*(1-cos(t));
+		rotationMatrix._12 = u.x*u.y*(1-cos(t)) - u.z*sin(t);
+		rotationMatrix._13 = u.x*u.z*(1-cos(t)) + u.y*sin(t);
+
+		rotationMatrix._21 = u.y*u.x*(1-cos(t)) + u.z*sin(t);
+		rotationMatrix._22 = cos(t) + u.y*u.y*(1-cos(t));
+		rotationMatrix._23 = u.y*u.z*(1-cos(t)) - u.x*sin(t);
+
+		rotationMatrix._31 = u.z*u.x*(1-cos(t)) - u.y*sin(t);
+		rotationMatrix._32 = u.z*u.y*(1-cos(t)) + u.x*sin(t);
+		rotationMatrix._33 = cos(t) + u.z*u.z*(1-cos(t));
+
+		//rotated ring of the tube
+		float3 rotated;
+		rotated.x = input.position.x - oldCenter.x;
+		rotated.y = input.position.y - oldCenter.y;
+		rotated.z = input.position.z - oldCenter.z;
+		rotated = mul(rotated, rotationMatrix);
+
+		//compute final position
+		float s = (input.distance - s1 - s2) / s3;
+		input.position.x = rotated.x + (1 - s)*p3.x + s*p4.x;
+		input.position.y = rotated.y + (1 - s)*p3.y + s*p4.y;
+		input.position.z = rotated.z + (1 - s)*p3.z + s*p4.z;
 	}
 
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
-    output.position = mul(input.position, worldMatrix);
+    //output.position = mul(input.position, worldMatrix);  //for the moment world matrix does nothing
+	output.position = input.position;
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
     
