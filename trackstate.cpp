@@ -148,8 +148,7 @@ void TrackState::onEnter(Level * l){
 		textDump("error creating track");
 		return;
 	} 
-	//(int) time(NULL)
-	if (!track->Initialize(1414922077 , "./Assets/tubedata.txt")){
+	if (!track->Initialize((int) time(NULL), "./Assets/tubedata.txt")){
 		textDump("error initializing track");
 		return;
 	}

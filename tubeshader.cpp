@@ -34,12 +34,12 @@ bool TubeShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DX
 						 D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
 						 D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset, 
 						 D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR3 p3, D3DXVECTOR3 p4,
-					     D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3)
+					     D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3, float maxAngle, float radius)
 {
 	//set shader parameters
 	if (!SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, 
 							 texture, lightDirection, diffuseColor, ambientColor, cameraPosition, 
-							 textureOffset, p1, p2, p3, p4, Center, v1, v2, s1, s2, s3))
+							 textureOffset, p1, p2, p3, p4, Center, v1, v2, s1, s2, s3, maxAngle, radius))
 	{
 		return false;
 	}
@@ -344,7 +344,7 @@ bool TubeShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMAT
 					   D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, 
 					   D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor, D3DXVECTOR4 ambientColor, D3DXVECTOR3 cameraPosition, float textureOffset,
 					   D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR3 p3, D3DXVECTOR3 p4,
-					   D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3)
+					   D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3, float maxAngle, float radius)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -456,8 +456,8 @@ bool TubeShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMAT
 	dataPtr4->s1 = s1;
 	dataPtr4->s2 = s2;
 	dataPtr4->s3 = s3;
-	dataPtr4->maxAngle = 3.00215;
-	dataPtr4->radius = 175.1;
+	dataPtr4->maxAngle = maxAngle;
+	dataPtr4->radius = radius;
 	dataPtr4->pad1 = 0.0f;
 	dataPtr4->pad2 = 0.0f;
 

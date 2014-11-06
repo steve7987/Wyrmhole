@@ -173,7 +173,7 @@ double TrackSegment::GetLength(){
 
 void TrackSegment::Render(){
 	g_graphics->RenderObject(tline, SHADER_COLOR);
-	float * params = new float[25];
+	float * params = new float[27];
 	params[0] = time;
 	params[1] = p1.x;
 	params[2] = p1.y;
@@ -199,6 +199,8 @@ void TrackSegment::Render(){
 	params[22] = s1;
 	params[23] = s2;
 	params[24] = s3;
+	params[25] = maxAngle;
+	params[26] = radius;
 
 	g_graphics->RenderObject(ttube, SHADER_TUBE, params);
 	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end();++it){
