@@ -63,6 +63,8 @@ private:
 	int numTubeSides;
 	int numTubeSegments;
 
+	D3DXMATRIX worldMatrix;
+
 	Texture * m_texture;
 };
 

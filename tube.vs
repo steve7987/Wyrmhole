@@ -147,8 +147,8 @@ PixelInputType TubeVertexShader(VertexInputType input)
 
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
-    //output.position = mul(input.position, worldMatrix);  //for the moment world matrix does nothing
-	output.position = input.position;
+    output.position = mul(input.position, worldMatrix);
+	//output.position = input.position;
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
     
@@ -157,8 +157,9 @@ PixelInputType TubeVertexShader(VertexInputType input)
 	output.tex.x += textureOffset;
     
     // Calculate the normal vector against the world matrix only.
-    //output.normal = mul(input.normal, (float3x3)worldMatrix);
-	
+    output.normal = mul(output.normal, (float3x3)worldMatrix);
+	output.normal = output.normal;
+
     // Normalize the normal vector.
     output.normal = normalize(output.normal);
 

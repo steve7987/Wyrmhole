@@ -366,6 +366,7 @@ bool Graphics::RenderObjectSS(Renderable * m, D3DXVECTOR3 direction, float stren
 bool Graphics::RenderObjectTube(Renderable * m, float textureOffset, D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR3 p3, D3DXVECTOR3 p4,
 						   D3DXVECTOR3 Center, D3DXVECTOR3 v1, D3DXVECTOR3 v2, float s1, float s2, float s3, float maxAngle, float radius)
 {
+	//m_d3d->TurnOffCulling();
 	if (!m->Render(m_d3d->GetDeviceContext(), activeCamera->GetLookVector())) {
 		return false;
 	}
@@ -376,6 +377,7 @@ bool Graphics::RenderObjectTube(Renderable * m, float textureOffset, D3DXVECTOR3
 	if (!result){
 		return false;
 	}
+	//m_d3d->TurnOnCulling();
 	return true;
 }
 
