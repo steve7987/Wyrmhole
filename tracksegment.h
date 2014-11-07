@@ -59,6 +59,9 @@ private:
 
 	float time;  //used to offset texture
 
+	//same as above vectors but transformed to origin so they can be correctly setup in shader
+	Vector renderp2, renderp3, renderp4, renderCenter, renderv1, renderv2; 
+
 };
 
 #endif

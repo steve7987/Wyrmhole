@@ -11,7 +11,9 @@ TrackSegment::~TrackSegment(){
 
 
 bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quaternion beginrot, double startdist, double rad, 
-							  double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile, float randomness, int smoothingPasses){
+							  double texturerepeat, int tubesides, int tubesegments, WCHAR * texturefile, float randomness, int smoothingPasses)
+{
+	time = 0;
 	this->p1 = p1;
 	this->p2 = p2;
 	this->p3 = p3;
@@ -81,7 +83,16 @@ bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quater
 		collidables.push_front(d);
 	}
 	*/
-	time = 0;
+	//setup rendering variables
+	Quaternion inverseRot = beginrot.inverse();
+	renderp2 = inverseRot * (p2 - p1);
+	renderp3 = inverseRot * (p3 - p1);
+	renderp4 = inverseRot * (p4 - p1);
+	renderCenter = inverseRot * (center - p1);
+	renderv1 = inverseRot * v1;
+	renderv2 = inverseRot * v2;
+
+	
 
 	return true;
 }
@@ -169,61 +180,31 @@ double TrackSegment::GetLength(){
 }
 
 void TrackSegment::Render(){
-	g_graphics->RenderObject(tline, SHADER_COLOR);
-	Quaternion inverseRot = beginrot.inverse();
-	Vector np2 = inverseRot * (p2 - p1);
-	Vector np3 = inverseRot * (p3 - p1);
-	Vector np4 = inverseRot * (p4 - p1);
-	Vector nCenter = inverseRot * (center - p1);
-	Vector nv1 = inverseRot * v1;
-	Vector nv2 = inverseRot * v2;
-
+	//g_graphics->RenderObject(tline, SHADER_COLOR);
+	
 	float * params = new float[27];
 	params[0] = time;
-	params[1] = 0;
+	params[1] = 0;  //p1 will always be zero after transforming it
 	params[2] = 0;
 	params[3] = 0;
-	params[4] = np2.x;
-	params[5] = np2.y;
-	params[6] = np2.z;
-	params[7] = np3.x;
-	params[8] = np3.y;
-	params[9] = np3.z;
-	params[10] = np4.x;
-	params[11] = np4.y;
-	params[12] = np4.z;
-	params[13] = nCenter.x;
-	params[14] = nCenter.y;
-	params[15] = nCenter.z;
-	params[16] = nv1.x;
-	params[17] = nv1.y;
-	params[18] = nv1.z;
-	params[19] = nv2.x;
-	params[20] = nv2.y;
-	params[21] = nv2.z;
-	/*
-	params[1] = p1.x - p1.x;
-	params[2] = p1.y - p1.y;
-	params[3] = p1.z - p1.z;
-	params[4] = p2.x - p1.x;
-	params[5] = p2.y - p1.y;
-	params[6] = p2.z - p1.z;
-	params[7] = p3.x - p1.x;
-	params[8] = p3.y - p1.y;
-	params[9] = p3.z - p1.z;
-	params[10] = p4.x - p1.x;
-	params[11] = p4.y - p1.y;
-	params[12] = p4.z - p1.z;
-	params[13] = center.x - p1.x;
-	params[14] = center.y - p1.y;
-	params[15] = center.z - p1.z;
-	params[16] = v1.x;
-	params[17] = v1.y;
-	params[18] = v1.z;
-	params[19] = v2.x;
-	params[20] = v2.y;
-	params[21] = v2.z;
-	*/
+	params[4] = renderp2.x;
+	params[5] = renderp2.y;
+	params[6] = renderp2.z;
+	params[7] = renderp3.x;
+	params[8] = renderp3.y;
+	params[9] = renderp3.z;
+	params[10] = renderp4.x;
+	params[11] = renderp4.y;
+	params[12] = renderp4.z;
+	params[13] = renderCenter.x;
+	params[14] = renderCenter.y;
+	params[15] = renderCenter.z;
+	params[16] = renderv1.x;
+	params[17] = renderv1.y;
+	params[18] = renderv1.z;
+	params[19] = renderv2.x;
+	params[20] = renderv2.y;
+	params[21] = renderv2.z;
 	params[22] = s1;
 	params[23] = s2;
 	params[24] = s3;

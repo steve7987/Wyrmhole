@@ -32,14 +32,7 @@ bool TrackTube::Initialize(ID3D11Device * device, TrackSegment * segment, WCHAR 
 	D3DXMatrixTranslation(&trans, translate.x, translate.y, translate.z);
 	D3DXMatrixRotationQuaternion(&rot, &qat);
 	worldMatrix = rot*trans;
-	std::ostringstream oss;
-	oss << "World Matrix: " << worldMatrix._11 << ", " << worldMatrix._12 << ", " << worldMatrix._13 << ", " << worldMatrix._14 << "\n";
-	oss << "World Matrix: " << worldMatrix._21 << ", " << worldMatrix._22 << ", " << worldMatrix._23 << ", " << worldMatrix._24 << "\n";
-	oss << "World Matrix: " << worldMatrix._31 << ", " << worldMatrix._32 << ", " << worldMatrix._33 << ", " << worldMatrix._34 << "\n";
-	oss << "World Matrix: " << worldMatrix._41 << ", " << worldMatrix._42 << ", " << worldMatrix._43 << ", " << worldMatrix._44 << "\n";
-	textDump(oss.str());
-
-
+	
 	//calculate verticies
 	GetVertexInfo(segment, radius, randomness, smoothingPasses);
 	if (!InitializeBuffers(device, segment, textureRepeat, startdist)){
