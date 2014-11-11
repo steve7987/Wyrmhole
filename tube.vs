@@ -70,6 +70,8 @@ PixelInputType TubeVertexShader(VertexInputType input)
 
 	//input.distance -= textureOffset;
 
+	//input.distance = input.distance * (s1 + s2 + s3);
+
 	if (input.distance <= s1){
 		float t = input.distance / s1;
 		input.position.x = input.position.x - oldCenter.x + (1 - t)*p1.x + t*p2.x;
@@ -154,7 +156,7 @@ PixelInputType TubeVertexShader(VertexInputType input)
     
     // Store the texture coordinates for the pixel shader.
     output.tex = input.tex;
-	output.tex.x += textureOffset;
+	//output.tex.x += textureOffset;
     
     // Calculate the normal vector against the world matrix only.
     output.normal = mul(output.normal, (float3x3)worldMatrix);
