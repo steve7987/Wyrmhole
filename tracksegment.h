@@ -32,7 +32,7 @@ public:
 	float GetSegmentRadius(double distance);  //gives the radius of the circle at this dist (negative means in third part)
 
 	void Update(float t);
-	void Render();  //renders the graphics associated withe the track segment
+	void Render(TrackTube * ttube);  //renders the graphics associated withe the track segment
 	std::list<Collidable*> * GetCollidables();
 	
 	int GetSegment(float distance);  //returns type of segment corresponding to this distance.  1 = enter line, 2 = circle, 3 = exit line
@@ -43,7 +43,6 @@ private:
 	Vector p1, p2, p3, p4;
 	double length;
 	TrackLine * tline;
-	TrackTube * ttube;
 
 	double startdist;
 

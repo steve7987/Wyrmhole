@@ -1,7 +1,7 @@
 #include "trackmanager.h"
 
 TrackManager::TrackManager(){
-
+	ttube = 0;
 }
 
 TrackManager::~TrackManager(){
@@ -128,12 +128,28 @@ bool TrackManager::Initialize(int seed, char * tubedatafile){
 		beginrot = Quaternion(ts->GetTangent(0), ts->GetTangent(ts->GetLength()))*beginrot;
 		beginrot = beginrot/beginrot.length();
 	}
-
+	//create tube model
+	ttube = new TrackTube();
+	if (!ttube){
+		textDump("error making track tube");
+		return false;
+	}
+	if (!ttube->Initialize(g_graphics->GetDevice(), wtex, segmentLength, trackRadius, texrepeat, tubesides, tubesegments, randomness, smoothingPasses)){
+		textDump("error initializing ttube");
+		return false;
+	}
+	
 	
 	return true;
 }
 
 void TrackManager::Shutdown(){
+	if (ttube){
+		ttube->Shutdown();
+		delete ttube;
+		ttube = 0;
+	}
+	
 	for (std::deque<TrackSegment*>::iterator it = segmentList.begin(); it != segmentList.end(); ++it){
 		(*it)->Shutdown();
 		delete (*it);
@@ -219,10 +235,10 @@ void TrackManager::Render(float distance){
 	for (std::deque<TrackSegment*>::iterator it = segmentList.begin(); it != segmentList.end(); ++it){
 		if (distCovered + (*it)->GetLength() > distance - trackRadius){  
 			//reached correct point in track so render next two segments (- radius to avoid gaps)
-			(*it)->Render();
+			(*it)->Render(ttube);
 			++it;
 			if (it != segmentList.end()){
-				(*it)->Render();
+				(*it)->Render(ttube);
 			}
 			return;
 		}

@@ -13,29 +13,17 @@ TrackTube::~TrackTube(){
 
 }
 	
-bool TrackTube::Initialize(ID3D11Device * device, TrackSegment * segment, WCHAR * textureFilename, float radius, 
-						   float textureRepeat, float startdist, int tubesides, int tubesegments, float randomness, int smoothingPasses) 
+bool TrackTube::Initialize(ID3D11Device * device, WCHAR * textureFilename, float segmentLength, float radius, 
+						   float textureRepeat, int tubesides, int tubesegments, float randomness, int smoothingPasses) 
 {
 	numTubeSides = tubesides;
 	numTubeSegments = tubesegments;
 	
-	//compute world matrix 
 	D3DXMatrixIdentity(&worldMatrix);
-	Quaternion rotation = segment->GetRotation(0);
-	Vector translate = segment->GetPoint(0);
-	D3DXQUATERNION qat;
-	qat.x = rotation.x;
-	qat.y = rotation.y;
-	qat.z = rotation.z;
-	qat.w = rotation.w;
-	D3DXMATRIX trans, rot;
-	D3DXMatrixTranslation(&trans, translate.x, translate.y, translate.z);
-	D3DXMatrixRotationQuaternion(&rot, &qat);
-	worldMatrix = rot*trans;
 	
 	//calculate verticies
-	GetVertexInfo(segment, radius, randomness, smoothingPasses);
-	if (!InitializeBuffers(device, segment, textureRepeat, startdist)){
+	GetVertexInfo(segmentLength, radius, randomness, smoothingPasses);
+	if (!InitializeBuffers(device, textureRepeat)){
 		return false;
 	}
 	m_texture = g_textureManager->GetTexture(device, textureFilename);
@@ -56,6 +44,20 @@ void TrackTube::Shutdown(){
 		m_vertexBuffer->Release();
 		m_vertexBuffer = 0;
 	}
+}
+
+void TrackTube::SetWorldMatrix(Vector scale, Quaternion rotation, Vector translate){
+	D3DXMatrixIdentity(&worldMatrix);
+	D3DXQUATERNION qat;
+	qat.x = rotation.x;
+	qat.y = rotation.y;
+	qat.z = rotation.z;
+	qat.w = rotation.w;
+	D3DXMATRIX trans, rot, sc;
+	D3DXMatrixTranslation(&trans, translate.x, translate.y, translate.z);
+	D3DXMatrixRotationQuaternion(&rot, &qat);
+	D3DXMatrixScaling(&sc, scale.x, scale.y, scale.z);
+	worldMatrix = sc*rot*trans;
 }
 
 bool TrackTube::Render(ID3D11DeviceContext * deviceContext, Vector camlook){
@@ -84,7 +86,7 @@ float TrackTube::getDepthSq(Vector campos, Vector camlook){
 	return 10; //doesnt matter, tube will never be transparent
 }
 
-bool TrackTube::InitializeBuffers(ID3D11Device * device, TrackSegment * segment, float repeat, float startdist){
+bool TrackTube::InitializeBuffers(ID3D11Device * device, float repeat){
 	VertexType* vertices;
 	unsigned long* indices;
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
@@ -264,16 +266,15 @@ void TrackTube::RenderBuffers(ID3D11DeviceContext * deviceContext){
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float randomness, int smoothingPasses){
+void TrackTube::GetVertexInfo(float segmentLength, float radius, float randomness, int smoothingPasses){
 	vinfo = new VertexInfo[TUBESIDES*(NUMTUBESEGMENTS+1)];
 	//setup verticies
-	double length = segment->GetLength();
+	//double length = segment->GetLength();
 	for (int i = 0; i < NUMTUBESEGMENTS + 1; i++){
-		float distanceDownTube = segment->GetLength()*((float)i/NUMTUBESEGMENTS);
-		Vector center = Vector(1,0,0)*distanceDownTube;//segment->GetPoint(i*length/NUMTUBESEGMENTS);
-		//Quaternion rotation = segment->GetRotation(i*length/NUMTUBESEGMENTS);
-		Vector v1 = Vector(0,1,0);//rotation*Vector(0,1,0);
-		Vector v2 = Vector(0,0,1);//rotation*Vector(0,0,1);
+		float distanceDownTube = segmentLength*((float)i/NUMTUBESEGMENTS);
+		Vector center = Vector(1,0,0)*distanceDownTube;
+		Vector v1 = Vector(0,1,0);
+		Vector v2 = Vector(0,0,1);
 		Vector randomOffset = Vector(0, 0, 0);
 		if (i != 0 && i != NUMTUBESEGMENTS && randb(0,1) < randomness){
 			//if its not the front or end of the segment add some randomness to look more wormholey

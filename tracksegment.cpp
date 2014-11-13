@@ -2,7 +2,6 @@
 
 TrackSegment::TrackSegment(){
 	tline = 0;
-	ttube = 0;
 }
 
 TrackSegment::~TrackSegment(){
@@ -57,15 +56,6 @@ bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quater
 		textDump("error initializing track line");
 		return false;
 	}
-	ttube = new TrackTube();
-	if (!ttube){
-		textDump("error making track tube");
-		return false;
-	}
-	if (!ttube->Initialize(g_graphics->GetDevice(), this, texturefile, rad, texturerepeat, startdist, tubesides, tubesegments, randomness, smoothingPasses)){
-		textDump("error initializing ttube");
-		return false;
-	}
 	/*
 	//setup rings
 	for (int i = 0; i < 5; i++){
@@ -109,12 +99,6 @@ void TrackSegment::Shutdown(){
 			t->Shutdown();
 			delete t;
 		}
-	}
-
-	if (ttube){
-		ttube->Shutdown();
-		delete ttube;
-		ttube = 0;
 	}
 	
 	if (tline){
@@ -183,9 +167,12 @@ double TrackSegment::GetLength(){
 	return length;
 }
 
-void TrackSegment::Render(){
+void TrackSegment::Render(TrackTube * ttube){
 	//g_graphics->RenderObject(tline, SHADER_COLOR);
-	
+	//set world matrix
+	ttube->SetWorldMatrix(Vector(1,1,1), beginrot, p1);
+
+
 	float * params = new float[27];
 	params[0] = time;
 	params[1] = 0;  //p1 will always be zero after transforming it

@@ -37,9 +37,11 @@ public:
 	TrackTube();
 	~TrackTube();
 	
-	bool Initialize(ID3D11Device * device, TrackSegment * segment, WCHAR * textureFilename, float radius, 
-					float textureRepeat, float startdist, int tubesides, int tubesegments, float randomness, int smoothingPasses);
+	bool Initialize(ID3D11Device * device, WCHAR * textureFilename, float segmentLength, float radius, 
+					float textureRepeat, int tubesides, int tubesegments, float randomness, int smoothingPasses);
 	void Shutdown();
+	
+	void SetWorldMatrix(Vector scale, Quaternion rotation, Vector translate);
 
 	bool Render(ID3D11DeviceContext * deviceContext, Vector camlook);
 	int GetIndexCount();
@@ -49,10 +51,10 @@ public:
 	float getDepthSq(Vector campos, Vector camlook);
 
 private:
-	bool InitializeBuffers(ID3D11Device * device, TrackSegment * segment, float repeat, float startdist);
+	bool InitializeBuffers(ID3D11Device * device, float repeat);
 	void RenderBuffers(ID3D11DeviceContext * deviceContext);
 
-	void GetVertexInfo(TrackSegment * segment, float radius, float randomness, int smoothingPasses);
+	void GetVertexInfo(float segmentLength, float radius, float randomness, int smoothingPasses);
 
 	ID3D11Buffer * m_vertexBuffer;
 	ID3D11Buffer * m_indexBuffer;

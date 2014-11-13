@@ -7,6 +7,7 @@
 #include "tracksegment.h"
 #include "classlist.h"
 #include "vector.h"
+#include "tracktube.h"
 
 
 class TrackManager{
@@ -40,6 +41,8 @@ private:
 	float totalLength;
 	float trackRadius;  //radius of the tube
 	float forwardProj;  //distance to place light source ahead of ship
+
+	TrackTube * ttube;  //track tube that all segments will use for rendering
 };
 
 
