@@ -294,16 +294,30 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float random
 	}
 	//apply smoothing
 	for (int j = 0; j < smoothingPasses; j++){
-		for (int i = 1; i < NUMTUBESEGMENTS; i++){
+		Vector * vSmooth = new Vector[TUBESIDES*(NUMTUBESEGMENTS+1)];
+		for (int i = 0; i < NUMTUBESEGMENTS + 1; i++){
 			for (int k = 0; k < TUBESIDES; k++){
+				float prevX = vinfo[i*TUBESIDES + k].position.x;
 				Vector p0 = vinfo[i*TUBESIDES + k].position;
 				Vector pup = vinfo[i*TUBESIDES + (k+1)%TUBESIDES].position;
 				Vector pdown = vinfo[i*TUBESIDES + (k-1+TUBESIDES)%TUBESIDES].position;
-				Vector pright = vinfo[(i+1)*TUBESIDES + k].position;
-				Vector pleft = vinfo[(i-1)*TUBESIDES + k].position;
-				vinfo[i*TUBESIDES + k].position = 0.2*(p0 + pup + pdown + pright + pleft);
+				Vector pright = vinfo[((i + 1) % (NUMTUBESEGMENTS + 1)) * TUBESIDES + k].position;
+				Vector pleft = vinfo[((i - 1 + (NUMTUBESEGMENTS + 1)) % (NUMTUBESEGMENTS + 1))*TUBESIDES + k].position;
+				//vinfo[i*TUBESIDES + k].position = 0.2*(p0 + pup + pdown + pright + pleft);
+				vSmooth[i*TUBESIDES + k] = 0.2*(p0 + pup + pdown + pright + pleft);
+				if (i == 0 || i == NUMTUBESEGMENTS){
+					vSmooth[i*TUBESIDES + k].x = prevX;
+				}
 			}
 		}
+		//copy over smoothed vertices
+		for (int i = 0; i < NUMTUBESEGMENTS + 1; i++){
+			for (int k = 0; k < TUBESIDES; k++){
+				vinfo[i*TUBESIDES + k].position = vSmooth[i*TUBESIDES + k];
+			}
+		}
+		delete [] vSmooth;
+		vSmooth = 0;
 	}
 
 	//calculate normals	
@@ -338,6 +352,11 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float random
 				Vector pleft = vinfo[(i-1)*TUBESIDES + k].position - p0;
 				Vector norm = pright.cross(pup) + pup.cross(pleft) + pleft.cross(pdown) + pdown.cross(pright);
 				vinfo[i*TUBESIDES + k].normal = norm/norm.length();
+			}
+			if (k == 0){
+				std::ostringstream oss;
+				oss << "Normal at: " << i << ": " << vinfo[i*TUBESIDES + k].normal.x << ", " << vinfo[i*TUBESIDES + k].normal.y << ", " << vinfo[i*TUBESIDES + k].normal.z;
+				textDump(oss.str());
 			}
 		}
 	}
