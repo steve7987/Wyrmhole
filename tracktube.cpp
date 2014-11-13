@@ -353,11 +353,13 @@ void TrackTube::GetVertexInfo(TrackSegment * segment, float radius, float random
 				Vector norm = pright.cross(pup) + pup.cross(pleft) + pleft.cross(pdown) + pdown.cross(pright);
 				vinfo[i*TUBESIDES + k].normal = norm/norm.length();
 			}
+			/*
 			if (k == 0){
 				std::ostringstream oss;
 				oss << "Normal at: " << i << ": " << vinfo[i*TUBESIDES + k].normal.x << ", " << vinfo[i*TUBESIDES + k].normal.y << ", " << vinfo[i*TUBESIDES + k].normal.z;
 				textDump(oss.str());
 			}
+			*/
 		}
 	}
 	

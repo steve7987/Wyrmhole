@@ -74,6 +74,13 @@ bool TrackManager::Initialize(int seed, char * tubedatafile){
 	Vector p3, p4;
 	Quaternion beginrot = Quaternion(0, 0, 0, 1);
 	float startdist = 0;
+	//all segments will have the same total length
+	float segmentLength = 3 * randb(minLength, maxLength);
+	/*
+	std::ostringstream oss;
+	oss << "Seg Length: " << segmentLength;
+	textDump(oss.str());
+	*/
 	for (int i = 0; i < numSegments; i++){
 		//Vector d3 = Vector(randb(-1*maxDisplacement, maxDisplacement), randb(-1*maxDisplacement, maxDisplacement), randb(-1*maxDisplacement, maxDisplacement)) ;
 		//p3 = p2 + d3 + (p2 - p1);
@@ -93,14 +100,18 @@ bool TrackManager::Initialize(int seed, char * tubedatafile){
 		Vector center = p2 + r/r.length()*radius;
 		
 		
-		
+		//put compute direction from p3 to p4 and store it in p4 for the moment
 		p4 = (p2 - center).cross((p3 - center)).cross(p3 - center);
 		if ((p2-center).cross(p1-p2)*(p2-center).cross(p3-center) >= 0){
 			p4 = -1*p4;
 		}
-		
 		p4 = p4 / p4.length();
-		p4 = p3 + p4 * randb(minLength, maxLength) / 2;
+
+		//compute final p4
+		Vector v1 = (p2 - center)/(p2 - center).length();
+		p4 = p3 + p4 * (segmentLength - (p2 - p1).length() - radius * acos(v1*(p3-center)/(p3-center).length()));
+		//p4 = p3 + p4 * randb(minLength, maxLength) / 2;
+
 		TrackSegment * ts = new TrackSegment();
 		if (!ts){
 			textDump("unable to create track segment");

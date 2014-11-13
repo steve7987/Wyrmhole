@@ -43,7 +43,11 @@ bool TrackSegment::Initialize(Vector p1, Vector p2, Vector p3, Vector p4, Quater
 	}
 	s2 = maxAngle*radius;
 	length = s1 + s2 + s3;
-
+	/*
+	std::ostringstream oss;
+	oss << "Seg Length: " << length;
+	textDump(oss.str());
+	*/
 	tline = new TrackLine();
 	if (!tline){
 		textDump("error creating track line");
