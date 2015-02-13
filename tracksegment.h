@@ -40,6 +40,8 @@ public:
 	double GetSegmentStart(int segment);  //gives the start point of the corresponding segment
 
 private:
+	void RenderSegment(TrackTube * ttube, float offset);  //renders the tube segment with the given time offset
+
 	Vector p1, p2, p3, p4;
 	double length;
 	TrackLine * tline;

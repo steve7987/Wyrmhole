@@ -50,6 +50,8 @@ struct PixelInputType
     float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
 	float3 viewDirection : TEXCOORD1;
+	float clipBeginning : SV_ClipDistance0;
+	float clipEnd : SV_ClipDistance1;
 };
 
 //Vertex shader
@@ -68,9 +70,7 @@ PixelInputType TubeVertexShader(VertexInputType input)
 	oldCenter.z = 0;
 	oldCenter = oldCenter * input.distance;
 
-	//input.distance -= textureOffset;
-
-	//input.distance = input.distance * (s1 + s2 + s3);
+	input.distance -= textureOffset;
 
 	if (input.distance <= s1){
 		float t = input.distance / s1;
@@ -171,6 +171,10 @@ PixelInputType TubeVertexShader(VertexInputType input)
 	//get view direction
 	output.viewDirection = cameraPosition.xyz - worldPosition.xyz;
 	output.viewDirection = normalize(output.viewDirection);
+
+	//setup clipping for beginning and end of the tube
+	output.clipBeginning = input.distance;
+	output.clipEnd = s1 + s2 + s3 - input.distance;
 
     return output;
 }

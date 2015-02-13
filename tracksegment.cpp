@@ -172,9 +172,20 @@ void TrackSegment::Render(TrackTube * ttube){
 	//set world matrix
 	ttube->SetWorldMatrix(Vector(1,1,1), beginrot, p1);
 
+	//render segments with offsets to cover entire path
+	RenderSegment(ttube, time);
+	RenderSegment(ttube, time - s1 - s2 - s3);
 
+	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end();++it){
+		if (*it){
+			(*it)->Render(0);	
+		}
+	}
+}
+
+void TrackSegment::RenderSegment(TrackTube * ttube, float offset){
 	float * params = new float[27];
-	params[0] = time;
+	params[0] = offset;
 	params[1] = 0;  //p1 will always be zero after transforming it
 	params[2] = 0;
 	params[3] = 0;
@@ -203,18 +214,13 @@ void TrackSegment::Render(TrackTube * ttube){
 	params[26] = radius;
 
 	g_graphics->RenderObject(ttube, SHADER_TUBE, params);
-	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end();++it){
-		if (*it){
-			(*it)->Render(0);	
-		}
-	}
 }
 
 void TrackSegment::Update(float t){
 	//update time for texture offset
-	time += t / 1000.0f;
-	if (time > 1){
-		time -= 1;
+	time += t / 10.0f;
+	if (time > s1 + s2 + s3){
+		time = time - s1 - s2 - s3;
 	}
 	
 	for (std::list<Collidable*>::iterator it = collidables.begin(); it != collidables.end(); ){
