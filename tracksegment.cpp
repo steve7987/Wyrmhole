@@ -218,7 +218,7 @@ void TrackSegment::RenderSegment(TrackTube * ttube, float offset){
 
 void TrackSegment::Update(float t){
 	//update time for texture offset
-	time += t / 10.0f;
+	time += t / 5.0f;
 	if (time > s1 + s2 + s3){
 		time = time - s1 - s2 - s3;
 	}

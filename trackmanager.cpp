@@ -215,6 +215,10 @@ float TrackManager::GetTrackRadius(){
 }
 
 void TrackManager::Update(float distance, float t){
+	for (std::deque<TrackSegment*>::iterator it = segmentList.begin(); it != segmentList.end(); ++it){
+		(*it)->Update(t);
+	}
+	/*
 	float distCovered = 0;
 	for (std::deque<TrackSegment*>::iterator it = segmentList.begin(); it != segmentList.end(); ++it){
 		if (distCovered + (*it)->GetLength() > distance - trackRadius){  
@@ -228,6 +232,7 @@ void TrackManager::Update(float distance, float t){
 		}
 		distCovered += (*it)->GetLength();
 	}
+	*/
 }
 
 void TrackManager::Render(float distance){
